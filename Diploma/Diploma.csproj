@@ -41,11 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="entity\IVector.cs" />
+    <Compile Include="entity\Matrix.cs" />
+    <Compile Include="entity\Quaternion.cs" />
+    <Compile Include="entity\Vector.cs" />
+    <Compile Include="entity\Vector3.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="entity\" />
     <Folder Include="methods\" />
     <Folder Include="scripts\" />
   </ItemGroup>
