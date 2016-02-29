@@ -10,6 +10,7 @@ namespace Diploma
         static void Main(string[] args)
         {
             Console.WriteLine("Heelooo! 12123123123123");
+            Console.WriteLine("Vasssy1");
         }
     }
 }
