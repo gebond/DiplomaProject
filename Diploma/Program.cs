@@ -13,13 +13,12 @@ namespace Diploma
             Console.WriteLine("\t\t\tHello to the programm");
             Console.WriteLine("\t\t\tPlease do not huste!\n\n");
 
-            IVector some = new Vector(3);
+            IVector some = new Vector(6);
             IVector some2 = new Vector3();
             IVector test = new Vector(3);
 
             
-            
-            
+           
             
             List<IVector> list = new List<IVector>();
             list.Add(some);
@@ -29,6 +28,13 @@ namespace Diploma
             {
                 vec.print();
             }
+
+
+            Matrix m = new Matrix(6);
+            m.print();
+            some = m*some;
+            some.print();
+            
 
             Console.Write("\n\n\n\n\n\n\n\t\t\tEnter key to exit ... ");
             Console.ReadKey();
