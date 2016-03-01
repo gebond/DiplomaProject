@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Diploma.entity
 {
-    class Matrix
+    public class Matrix
     {
     }
 }
