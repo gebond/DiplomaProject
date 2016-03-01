@@ -10,22 +10,27 @@ namespace Diploma
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Heelooo! 12123123123123");
-            Console.WriteLine("Vasssy1");
+            Console.WriteLine("\t\t\tHello to the programm");
+            Console.WriteLine("\t\t\tPlease do not huste!\n\n");
 
-            IVector some = new Vector();
+            IVector some = new Vector(3);
             IVector some2 = new Vector3();
+            IVector test = new Vector(3);
 
+            
+            
+            
+            
             List<IVector> list = new List<IVector>();
             list.Add(some);
             list.Add(some2);
-
+            list.Add(test);
             foreach (IVector vec in list)
             {
                 vec.print();
             }
 
-            Console.Write("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEnter key to exit ... ");
+            Console.Write("\n\n\n\n\n\n\n\t\t\tEnter key to exit ... ");
             Console.ReadKey();
         }
     }
