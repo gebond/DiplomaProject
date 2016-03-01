@@ -1,14 +1,15 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace UnitTests
+namespace UnitTests.entity
 {
     [TestClass]
-    public class UnitTest1
+    public class QuaternionTest
     {
         [TestMethod]
         public void TestMethod1()
         {
+
         }
     }
 }
