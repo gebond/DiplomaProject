@@ -11,6 +11,10 @@ namespace Diploma
         {
             Console.WriteLine("Heelooo! 12123123123123");
             Console.WriteLine("Vasssy1");
+
+
+
+
             Console.WriteLine("Enter key to exit");
             Console.ReadKey();
         }
