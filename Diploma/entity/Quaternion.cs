@@ -7,5 +7,11 @@ namespace Diploma.entity
 {
     public class Quaternion
     {
+        private Vector3 v;
+        private decimal w;
+
+
+
+
     }
 }
