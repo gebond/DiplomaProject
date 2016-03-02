@@ -7,7 +7,6 @@ namespace Diploma.entity
 {
     public class Vector3:IVector
     {
-
         // поля
         private double x;
         private double y;
@@ -74,5 +73,67 @@ namespace Diploma.entity
             get { return 3; }
         }
 
+        public double getx() { return x; }
+        public double gety() { return y; }
+        public double getz() { return z; }
+
+        public static Vector3 operator +(Vector3 v1, Vector3 v2)
+        {
+            return new Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+        }
+        public static Vector3 operator -(Vector3 a, Vector3 b)
+        {
+            return new Vector3(a.x - b.x, a.y - b.y, a.z - b.z);
+        }
+        public static Vector3 operator *(double a, Vector3 v)
+        {
+            return new Vector3(a * v.x, a * v.y, a * v.z);
+        }
+        public static Vector3 operator *(int a, Vector3 v)
+        {
+            return new Vector3((double)a * v.x, (double)a * v.y, (double)a * v.z);
+        }
+        public static double operator *(Vector3 v1, Vector3 v2)
+        { //скалярное произведение
+            return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+        }
+        public static Vector3 operator %(Vector3 v1, Vector3 v2)
+        {
+            return new Vector3((double)v1.y * v2.z - v1.z * v2.y, (double)v1.z * v2.x - v1.x * v2.z, (double)v1.x * v2.y - v1.y * v2.x);
+        } //векторное произведение
+        public static bool operator ==(Vector3 a, Vector3 b)
+        {
+            // If both are null, or both are same instance, return true.
+            if (System.Object.ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)a == null) || ((object)b == null))
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return a.x == b.x && a.y == b.y && a.z == b.z;
+        }
+        public static bool operator !=(Vector3 a, Vector3 b)
+        {
+            return !(a == b);
+        }
+        public bool Equals(Vector3 a)
+        {
+            // Return true if the fields match:
+            return x == a.x && y == a.y && z == a.z;
+        }
+        public override int GetHashCode()
+        {
+            int hashcode = 0; 
+            hashcode = 31 * hashcode + (int)x.GetHashCode();
+            hashcode = 31 * hashcode + (int)y.GetHashCode();
+            hashcode = 31 * hashcode + (int)z.GetHashCode();
+            return hashcode;
+        }
     }
 }
