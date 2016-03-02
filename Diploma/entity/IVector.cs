@@ -5,7 +5,15 @@ using System.Text;
 
 namespace Diploma.entity
 {
-    interface IVector
+    public interface IVector
     {
+        void print();
+        int length { get; }
+        double this[int index]
+        {
+            get;
+            set;
+        }
+
     }
 }
