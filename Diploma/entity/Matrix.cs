@@ -8,17 +8,17 @@ namespace Diploma.entity
     public class Matrix
     {
         private short dim;
-        private decimal[,] matr;
+        private double[,] matr;
 
         public Matrix(short dimension)
         {
             dim = dimension;
-            matr = new decimal[dim, dim];
+            matr = new double[dim, dim];
         }
-        public Matrix(decimal[,] mass)
+        public Matrix(double[,] mass)
         {   
             dim = (short)Math.Sqrt(mass.Length);
-            matr = new decimal[dim, dim];
+            matr = new double[dim, dim];
             for (int i = 0; i < dim; i++)
             {
                 for (int j = 0; j < dim; j++)
@@ -29,7 +29,7 @@ namespace Diploma.entity
         }
         public Matrix(Matrix m)
         {
-            matr = new decimal[m.length, m.length];
+            matr = new double[m.length, m.length];
             for (int i = 0; i < dim; i++)
             {
                 for (int j = 0; j < dim; j++)
@@ -70,7 +70,7 @@ namespace Diploma.entity
         {
             get { return dim; }
         }
-        public decimal this[int i, int j]
+        public double this[int i, int j]
         {
             get{ return matr[i,j]; }
             set { matr[i,j] = value; }
@@ -100,7 +100,7 @@ namespace Diploma.entity
             }
             return summ;
         }
-        public static Matrix operator *(decimal a, Matrix obj)
+        public static Matrix operator *(double a, Matrix obj)
         {
             Matrix result = new Matrix(obj.length);
             for (int i = 0; i < obj.length; i++)
@@ -132,6 +132,7 @@ namespace Diploma.entity
             }
             return result;
         }
+
         public static IVector operator *(Matrix mat, IVector vec)
         {
             IVector result = new Vector(vec.length);
@@ -142,7 +143,7 @@ namespace Diploma.entity
             }
             for (int i = 0; i < vec.length; i++)
             {
-                decimal summ = 0;
+                double summ = 0;
                 for (int j = 0; j < vec.length; j++)
                 {
                     summ += mat[i, j] * vec[j];

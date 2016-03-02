@@ -9,7 +9,7 @@ namespace Diploma.entity
     {
         void print();
         int length { get; }
-        decimal this[int index]
+        double this[int index]
         {
             get;
             set;

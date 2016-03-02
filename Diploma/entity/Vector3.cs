@@ -9,15 +9,15 @@ namespace Diploma.entity
     {
 
         // поля
-        private decimal x;
-        private decimal y;
-        private decimal z;
+        private double x;
+        private double y;
+        private double z;
 
         public Vector3()
         {
             x = 0; y = 0; z = 0;
         }
-        public Vector3(decimal x, decimal y, decimal z)
+        public Vector3(double x, double y, double z)
         { 
             this.x = x; this.y = y; this.z = z; 
         }
@@ -35,7 +35,7 @@ namespace Diploma.entity
             }
         }
 
-        decimal IVector.this[int index]
+        double IVector.this[int index]
         {
             get 
             {
@@ -73,7 +73,6 @@ namespace Diploma.entity
         {
             get { return 3; }
         }
-
 
     }
 }

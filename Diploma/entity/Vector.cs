@@ -7,15 +7,15 @@ namespace Diploma.entity
 {
     public class Vector:IVector
     {
-        private decimal[] vect;
+        private double[] vect;
 
         public Vector(int dim)
         {
-            vect = new decimal[dim];
+            vect = new double[dim];
         }
-        public Vector(decimal[] mass)
+        public Vector(double[] mass)
         {
-            vect = new decimal[mass.Length];
+            vect = new double[mass.Length];
             for (int i = 0; i < mass.Length; i++)
             {
                 vect[i] = mass[i];
@@ -23,7 +23,7 @@ namespace Diploma.entity
         }
         public Vector(IVector a)
         {
-            vect = new decimal[a.length];
+            vect = new double[a.length];
             for (int i = 0; i < a.length; i++)
             {
                 vect[i] = a[i];
@@ -60,7 +60,7 @@ namespace Diploma.entity
         {
             get { return vect.Length; }
         }
-        decimal IVector.this[int index]
+        double IVector.this[int index]
         {
             get{ return vect[index]; }
             set { vect[index] = value; }
