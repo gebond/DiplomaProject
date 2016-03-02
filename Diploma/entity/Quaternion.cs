@@ -38,6 +38,12 @@ namespace Diploma.entity
         {
             //var res = new Quaternion(Math.Cos(0.5 * angle), Math.Sin(0.5 * angle) * v);
         }
+
+        public double getw() { return w; }
+        public double getx() { return v.getx(); }
+        public double gety() { return v.gety(); }
+        public double getz() { return v.getz(); }
+
         public static Quaternion operator +(Quaternion q1, Quaternion q2)
         {
             return new Quaternion(q1.w + q2.w, q1.v + q2.v);
