@@ -44,6 +44,64 @@ namespace Diploma.entity
         public double gety() { return v.gety(); }
         public double getz() { return v.getz(); }
 
+        // методы 
+        public void changeToStandart()
+        {
+            this.w = 1;
+            this.v = new Vector3();
+        }
+        public Quaternion getConjugateQuaternion()
+        {
+            return new Quaternion(w, (-1) * this.v.getx(), (-1) * this.v.gety(), (-1) * this.v.getz());
+        }
+        public double getNorm()
+        {
+            return this.v * this.v + this.w * this.w;
+        }
+        public double getMagnitude()
+        {
+            return System.Math.Sqrt(this.getNorm());
+        }
+        public Quaternion getInverse()
+        {
+            return new Quaternion(1.0 / this.getNorm() * this.getConjugateQuaternion());
+        }
+        public void changeValues(double neww, double newx, double newy, double newz)
+        {
+            this.w = neww;
+            this.v = new Vector3(newx, newy, newz);
+        }
+        public void changeValues(Vector3 v, double w)
+        {
+            this.w = w;
+            this.v = v;
+        }
+        public void changeValues(Quaternion q)
+        {
+            this.w = q.w;
+            this.v = q.v;
+        }
+
+        // печать
+        public void print()
+        {
+            System.Console.WriteLine("Quaternion: [{0}, ({1}, {2}, {3})];", this.w, this.v.getx(), this.v.gety(), this.v.getz());
+        }
+        public void printInverse()
+        {
+
+            System.Console.Write("Inverse: ");
+            this.getInverse().print();
+        }
+        public void printNorm()
+        {
+            System.Console.WriteLine("Norm: " + this.getNorm() + ";");
+        }
+        public void printMagnitude()
+        {
+            System.Console.WriteLine("Magnitude: " + this.getMagnitude() + ";");
+        }
+
         public static Quaternion operator +(Quaternion q1, Quaternion q2)
         {
             return new Quaternion(q1.w + q2.w, q1.v + q2.v);
@@ -99,9 +157,14 @@ namespace Diploma.entity
             // Return true if the fields match:
             return w == a.w && v == a.v;
         }
-
-
-
-
+        public override int GetHashCode()
+        {
+            int hashcode = 0;
+            hashcode = 31 * hashcode + (int)w.GetHashCode();
+            hashcode = 31 * hashcode + (int)v.getx().GetHashCode();
+            hashcode = 31 * hashcode + (int)v.gety().GetHashCode();
+            hashcode = 31 * hashcode + (int)v.getz().GetHashCode();
+            return hashcode;
+        }
     }
 }
