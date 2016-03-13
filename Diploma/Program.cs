@@ -14,11 +14,15 @@ namespace Diploma
         {
             Console.WriteLine("\t\t\tStart of application");
 
-            Quaternion start = new Quaternion();
-            Quaternion end = new Quaternion();
-            MainProblem main = new MainProblem(start, end);
-            main.printCurrentParameters();
+            Quaternion Quat0 = new Quaternion(1,1,1,1);
+            Quaternion QuatT = new Quaternion();
+            Quaternion psiStart = new Quaternion();
+            int stepsForRk = 100;
+            double T_start = 10.0;
 
+            MainProblem main = new MainProblem(Quat0, QuatT, 0.01, psiStart, stepsForRk, T_start);
+            main.start();
+            //main.printCurrentParameters();
 
             Console.Write("\n\n\n\n\n\t\t\tEnter an key to exit... ");
             Console.ReadKey();

@@ -102,6 +102,11 @@ namespace Diploma.entity
             System.Console.WriteLine("Magnitude: " + this.getMagnitude() + ";");
         }
 
+        public static Quaternion Abs(Quaternion toAbs)
+        {
+            return new Quaternion(Math.Abs(toAbs.w), Math.Abs(toAbs.getx()), Math.Abs(toAbs.gety()), Math.Abs(toAbs.getz()));
+        }
+
         public static Quaternion operator +(Quaternion q1, Quaternion q2)
         {
             return new Quaternion(q1.w + q2.w, q1.v + q2.v);
