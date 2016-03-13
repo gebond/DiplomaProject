@@ -73,9 +73,19 @@ namespace Diploma.entity
             get { return 3; }
         }
 
+        double IVector.norm()
+        {
+            return Math.Sqrt(x*x + y*y + z*z);
+        }
+
         public double getx() { return x; }
         public double gety() { return y; }
         public double getz() { return z; }
+
+        public double norm()
+        {
+            return Math.Sqrt(x * x + y * y + z * z);
+        }
 
         public static Vector3 operator +(Vector3 v1, Vector3 v2)
         {

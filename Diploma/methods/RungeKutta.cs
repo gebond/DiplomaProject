@@ -6,12 +6,9 @@ namespace Diploma.methods
 {
     class RungeKutta
     {
-        public static Quaternion[] Run(Quaternion psi, double Time, Quaternion lambda0, int steps)
+        public static Quaternion Run(Quaternion psi, double Time, Quaternion lambda0, int n)
         {
             Console.WriteLine("\n\t\t* run RungeKutta...");
-            
-            
-
 
             return null;
         }

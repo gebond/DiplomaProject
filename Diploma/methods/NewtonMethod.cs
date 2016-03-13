@@ -7,28 +7,37 @@ namespace Diploma.methods
     {        
         
         private MainProblem callMain;
-        private int steps; // кол-во шагов в методе РК
+        private int n; // кол-во шагов в методе РК
         private Quaternion psi_Old;
         private double T_old;
 
-        public NewtonMethod(MainProblem CallFrom, Quaternion psiStart, int steps, double T_start)
+        public NewtonMethod(MainProblem CallFrom, Quaternion psiStart, double T_start)
         {
             Console.WriteLine("\n\t* NewtonMethod created!");
             callMain = CallFrom;
-            this.steps = steps;
             psi_Old = psiStart;
             T_old = T_start;
+
         }
 
         public void RunProcess()
         {
-
-            Quaternion r_diff;
-
-            /*while()
+            Vector delta;
+            do
             {
-            *
-            }*/
+                while ((double)T_old / callMain.N > 0.5) // проверяем будет ли ШАГ > 0.5
+                {
+                    callMain.N *= 2;
+                }
+                Quaternion res = RungeKutta.Run(psi_Old, T_old, callMain.Lambda0, callMain.N); // обращение к метду РК
+
+                
+                // обращение к методам подсчета невязки, и пересчета поправки
+
+                Console.WriteLine("123123");
+                delta = new Vector(5); // поправки которые мы нашли
+
+            } while (delta.norm() > callMain.Epsilon);
         }
 
         private Quaternion countR(Quaternion lambdaArpox, Quaternion lambdaExact) // считает невязку

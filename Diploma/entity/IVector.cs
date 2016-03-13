@@ -12,6 +12,6 @@ namespace Diploma.entity
             get;
             set;
         }
-
+        double norm();
     }
 }

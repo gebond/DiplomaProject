@@ -19,6 +19,16 @@ namespace Diploma.methods
         }
 
         private double eps; // epsilon - точность
+        public double Epsilon
+        {
+            get { return eps; }
+        }
+        private int n;
+        public int N
+        {
+            get { return n; }
+            set { n = value; }
+        }
 
         private Quaternion lambdaResult;
         public Quaternion LambdaResult
@@ -36,13 +46,14 @@ namespace Diploma.methods
 
         private NewtonMethod newtonMethod;
 
-        public MainProblem(Quaternion lam_0, Quaternion lam_t, double precision, Quaternion psi_start, int stepsRk, double T_start)
+        public MainProblem(Quaternion lam_0, Quaternion lam_t, double precision, Quaternion psi_start, double T_start, int n)
         {
             Console.WriteLine("\n\t* MainProblem created!");
             lambda0 = lam_0;
             lambdaT = lam_t;
             eps = precision;
-            newtonMethod = new NewtonMethod(this, psi_start, stepsRk, T_start);
+            N = n;
+            newtonMethod = new NewtonMethod(this, psi_start, T_start);
         }
 
         public void start()
@@ -57,6 +68,7 @@ namespace Diploma.methods
             Console.WriteLine("\n\t* MainProblem ->");
             Console.WriteLine("\n\tCurrent Parameters:");
             Console.WriteLine("\t\tepsilon = {0}", eps);
+            Console.WriteLine("\t\tn = {0}", n);
             Console.WriteLine("\t\tt=0:");
             Console.Write("\t\t");
             lambda0.print();

@@ -15,12 +15,17 @@ namespace Diploma
             Console.WriteLine("\t\t\tStart of application");
 
             Quaternion Quat0 = new Quaternion(1,1,1,1);
+
             Quaternion QuatT = new Quaternion();
+
             Quaternion psiStart = new Quaternion();
-            int stepsForRk = 100;
+
+            int n = 100;
+
             double T_start = 10.0;
 
-            MainProblem main = new MainProblem(Quat0, QuatT, 0.01, psiStart, stepsForRk, T_start);
+
+            MainProblem main = new MainProblem(Quat0, QuatT, 0.01, psiStart, T_start, n);
             main.start();
             //main.printCurrentParameters();
 

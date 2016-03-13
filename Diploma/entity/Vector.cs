@@ -65,7 +65,45 @@ namespace Diploma.entity
             get{ return vect[index]; }
             set { vect[index] = value; }
         }
+        double IVector.norm()
+        {
+            double res = 0;
+            try
+            {  
+                for (int i = 0; i < vect.Length; i++)
+                {
+                    if (Math.Abs(vect[i]) > res)
+                    {
+                        res = Math.Abs(vect[i]);
+                    }
+                }
+            }
+            catch(NullReferenceException)
+            {
+                Console.WriteLine("Empty Vect massive!");
+            }
+            return res;
+        }
 
+        public double norm()
+        {
+            double res = 0;
+            try
+            {
+                for (int i = 0; i < vect.Length; i++)
+                {
+                    if (Math.Abs(vect[i]) > res)
+                    {
+                        res = Math.Abs(vect[i]);
+                    }
+                }
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("Empty Vect massive!");
+            }
+            return res;
+        } 
         public static Vector operator +(Vector v1, Vector v2)
         {
             if(v1.vect.Length != v2.vect.Length)
