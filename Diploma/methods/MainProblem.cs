@@ -30,6 +30,19 @@ namespace Diploma.methods
             set { n = value; }
         }
 
+        private double omega_max;
+        public double OmegaMax
+        {
+            get { return omega_max; }
+        }
+        private double omega_min;
+        public double OmegaMin
+        {
+            get { return omega_min; }
+        }
+    
+
+
         private Quaternion lambdaResult;
         public Quaternion LambdaResult
         {
@@ -46,13 +59,15 @@ namespace Diploma.methods
 
         private NewtonMethod newtonMethod;
 
-        public MainProblem(Quaternion lam_0, Quaternion lam_t, double precision, Quaternion psi_start, double T_start, int n)
+        public MainProblem(Quaternion lam_0, Quaternion lam_t, double precision, Quaternion psi_start, double T_start, int n, IVector omega)
         {
             Console.WriteLine("\n\t* MainProblem created!");
             lambda0 = lam_0;
             lambdaT = lam_t;
             eps = precision;
             N = n;
+            omega_min = omega[0];
+            omega_max = omega[1];
             newtonMethod = new NewtonMethod(this, psi_start, T_start);
         }
 

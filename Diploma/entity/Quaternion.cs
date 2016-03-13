@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Diploma.entity
 {
-    public class Quaternion
+    public class Quaternion: IVector
     {   
         // поля
         private Vector3 v;
@@ -39,10 +39,75 @@ namespace Diploma.entity
             //var res = new Quaternion(Math.Cos(0.5 * angle), Math.Sin(0.5 * angle) * v);
         }
 
-        public double getw() { return w; }
-        public double getx() { return v.getx(); }
-        public double gety() { return v.gety(); }
-        public double getz() { return v.getz(); }
+        public double W
+        {
+            get { return w; }
+        }
+        public double X 
+        { 
+            get { return v.X; }
+        }
+        public double Y
+        { 
+            get { return v.Y; }
+        }
+        public double Z 
+        { 
+            get { return v.Z; }
+        }
+
+        double IVector.this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case (0): return w;
+                    case (1): return v.X;
+                    case (2): return v.Y;
+                    case (3): return v.Z;
+                    default: return 0;
+                }
+            }
+            set
+            {
+                switch (index)
+                {
+                    case (0): w = value; break;
+                    case (1): v.X = value; break;
+                    case (2): v.Y = value; break;
+                    case (3): v.Z = value; break;
+                    default: break;
+                }
+            }
+        }
+
+        public double this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case (0): return w;
+                    case (1): return v.X;
+                    case (2): return v.Y;
+                    case (3): return v.Z;
+                    default: return 0;
+                }
+            }
+            set
+            {
+                switch (index)
+                {
+                    case (0): w = value; break;
+                    case (1): v.X = value; break;
+                    case (2): v.Y = value; break;
+                    case (3): v.Z = value; break;
+                    default: break;
+                }
+            }
+        }
+
 
         // методы 
         public void changeToStandart()
@@ -52,7 +117,7 @@ namespace Diploma.entity
         }
         public Quaternion getConjugateQuaternion()
         {
-            return new Quaternion(w, (-1) * this.v.getx(), (-1) * this.v.gety(), (-1) * this.v.getz());
+            return new Quaternion(w, (-1) * this.v.X, (-1) * this.v.Y, (-1) * this.v.Z);
         }
         public double getNorm()
         {
@@ -85,7 +150,7 @@ namespace Diploma.entity
         // печать
         public void print()
         {
-            System.Console.WriteLine("Quaternion: [{0}, ({1}, {2}, {3})];", this.w, this.v.getx(), this.v.gety(), this.v.getz());
+            System.Console.WriteLine("Quaternion: [{0}, ({1}, {2}, {3})];", this.w, this.v.X, this.v.Y, this.v.Z);
         }
         public void printInverse()
         {
@@ -104,7 +169,7 @@ namespace Diploma.entity
 
         public static Quaternion Abs(Quaternion toAbs)
         {
-            return new Quaternion(Math.Abs(toAbs.w), Math.Abs(toAbs.getx()), Math.Abs(toAbs.gety()), Math.Abs(toAbs.getz()));
+            return new Quaternion(Math.Abs(toAbs.w), Math.Abs(toAbs.X), Math.Abs(toAbs.Y), Math.Abs(toAbs.Z));
         }
 
         public static Quaternion operator +(Quaternion q1, Quaternion q2)
@@ -129,11 +194,11 @@ namespace Diploma.entity
         }// УМНОЖЕНИЕ
         public static Quaternion operator *(Quaternion q1, Quaternion q2)
         {
-            return new Quaternion(q1.getw() * q2.getw(), q1.getx() * q2.getx(), q1.gety() * q2.gety(), q1.getz() * q2.getz());
+            return new Quaternion(q1.W * q2.W, q1.X * q2.X, q1.Y * q2.Y, q1.Z * q2.Z);
         } // и все таки скалярное произведение
         public static Quaternion operator *(Quaternion q, Vector3 v)
         {
-            var q2 = new Quaternion(0.0, v.getx(), v.gety(), v.getz());
+            var q2 = new Quaternion(0.0, v.X, v.Y, v.Z);
             return new Quaternion(q * q2);
         }
         public static bool operator ==(Quaternion a, Quaternion b)
@@ -157,18 +222,18 @@ namespace Diploma.entity
         {
             return !(a == b);
         }
-        public bool Equals(Quaternion a)
+        public override bool Object.Equals(Object obj)
         {
-            // Return true if the fields match:
-            return w == a.w && v == a.v;
+            Quaternion q = (Quaternion)obj;
+            return w == q.w && v == q.v;
         }
         public override int GetHashCode()
         {
             int hashcode = 0;
             hashcode = 31 * hashcode + (int)w.GetHashCode();
-            hashcode = 31 * hashcode + (int)v.getx().GetHashCode();
-            hashcode = 31 * hashcode + (int)v.gety().GetHashCode();
-            hashcode = 31 * hashcode + (int)v.getz().GetHashCode();
+            hashcode = 31 * hashcode + (int)v.X.GetHashCode();
+            hashcode = 31 * hashcode + (int)v.Y.GetHashCode();
+            hashcode = 31 * hashcode + (int)v.Z.GetHashCode();
             return hashcode;
         }
     }

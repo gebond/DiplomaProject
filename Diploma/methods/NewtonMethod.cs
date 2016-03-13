@@ -22,20 +22,26 @@ namespace Diploma.methods
 
         public void RunProcess()
         {
-            Vector delta;
+            Vector delta = new Vector(5);
+            Vector vectPsiTime = new Vector(5);
+            /**
+             * Vector vectPsiTime = [Quaternion Psi, Time]
+             * vect[0,1,2,3] = Psi[0,1,2,3]
+             * vect[4] == Time
+             * */
             do
             {
-                while ((double)T_old / callMain.N > 0.5) // проверяем будет ли ШАГ > 0.5
+                while ((double)T_old / callMain.N >= 0.5) // проверяем будет ли ШАГ >= 0.5
                 {
-                    callMain.N *= 2;
+                    callMain.N *= 2; // дробим количество шагов  если условие выполнилось
                 }
-                Quaternion res = RungeKutta.Run(psi_Old, T_old, callMain.Lambda0, callMain.N); // обращение к метду РК
+                Quaternion res = RungeKutta.Run(vectPsiTime, callMain); // обращение к метду РК
 
                 
                 // обращение к методам подсчета невязки, и пересчета поправки
 
-                Console.WriteLine("123123");
-                delta = new Vector(5); // поправки которые мы нашли
+                delta = delta; // поправки которые мы нашли
+                
 
             } while (delta.norm() > callMain.Epsilon);
         }

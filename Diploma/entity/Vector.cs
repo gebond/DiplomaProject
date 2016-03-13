@@ -85,6 +85,11 @@ namespace Diploma.entity
             return res;
         }
 
+        public double this[int index]
+        {
+            get { return vect[index]; }
+            set { vect[index] = value; }
+        }
         public double norm()
         {
             double res = 0;
