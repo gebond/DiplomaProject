@@ -90,7 +90,6 @@ namespace Diploma.methods
             Console.WriteLine("\t\tt=T:");
             Console.Write("\t\t");
             lambdaT.print();
-
         }
 
 

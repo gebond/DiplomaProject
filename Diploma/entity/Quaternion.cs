@@ -81,6 +81,26 @@ namespace Diploma.entity
                 }
             }
         }
+        void IVector.print()
+        {
+            try
+            {
+                System.Console.WriteLine("Quaternion: [{0}, ({1}, {2}, {3})];", this.w, this.v.X, this.v.Y, this.v.Z);
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("Empty Quaternion!");
+            }
+        }
+        int IVector.length
+        {
+            get { return 3; }
+        }
+        double IVector.norm()
+        {
+            return this.getMagnitude();
+        }
+        
 
         public double this[int index]
         {
@@ -222,7 +242,7 @@ namespace Diploma.entity
         {
             return !(a == b);
         }
-        public override bool Object.Equals(Object obj)
+        public bool Equals(Object obj)
         {
             Quaternion q = (Quaternion)obj;
             return w == q.w && v == q.v;
