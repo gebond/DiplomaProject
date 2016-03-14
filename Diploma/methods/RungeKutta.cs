@@ -9,7 +9,7 @@ namespace Diploma.methods
 
         private static double h;
         
-        public static Quaternion Run(Vector vectPsitime, MainProblem callMain)
+        public static Quaternion Run(PsiTime psitime, MainProblem callMain)
         {
             /**
              * Vector vectPsiTime = [Quaternion Psi, Time]
@@ -18,12 +18,12 @@ namespace Diploma.methods
              * */
 
             Console.WriteLine("\t\t\t * RK started");
-            double Time = vectPsitime[4];
+            double Time = psitime.T;
             h = Time/callMain.N; // посчитали шаг
 
 
             Quaternion lam_k = callMain.Lambda0; 
-            Quaternion psi_k = new Quaternion(vectPsitime[0], vectPsitime[1], vectPsitime[2], vectPsitime[3]);
+            Quaternion psi_k = new Quaternion(psitime.psi);
             Quaternion omega_k = new Quaternion();
 
             for (int k = 0; k < callMain.N; k++)
