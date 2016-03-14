@@ -1,5 +1,6 @@
 ﻿using System;
 using Diploma.entity;
+using System.Collections.Generic;
 
 namespace Diploma.methods
 {
@@ -7,9 +8,11 @@ namespace Diploma.methods
     {        
         
         private MainProblem callMain;
-        private int n; // кол-во шагов в методе РК
-        Vector delta = new Vector(5);
-        Vector vectPsiTime = new Vector(5);
+        double del = 0.00000001; // дельта для метода 
+        Vector vectPsiTime = new Vector(5); // кватернион + время
+        Vector N_old = new Vector(5); // невязка на шаге метода ньютона
+        HashSet<double> xi = new HashSet<double> { 1.0, 0.5, 0.25, 0.125, 0.0625, 0.03125, 0.15625, 0.0078125 }; // коэффициенты хи
+
 
         public NewtonMethod(MainProblem CallFrom, Quaternion psiStart, double T_start)
         {
@@ -29,35 +32,34 @@ namespace Diploma.methods
 
         public void RunProcess()
         {
-            Console.WriteLine("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Newton %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-            int newtonItaration = 0;
+            Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Newton %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+            int newtonItaration = 1;
             do
             {
-                Console.WriteLine("\n\t\t{0} Newton:", newtonItaration);
-                while ( vectPsiTime[4] / callMain.N >= 0.001) // проверяем будет ли ШАГ >= 0.5
+                Console.WriteLine("\n\t\t* Newton {0} iteration:", newtonItaration);
+                while ((double) vectPsiTime[4] / callMain.N >= 0.0011) // проверяем будет ли ШАГ <= 0.5
                 {
                     callMain.N *= 2; // дробим количество шагов  если условие выполнилось
                 }
+                Console.WriteLine("\t\t  params: T = {0}, n = {1}, h = {2}", vectPsiTime[4], callMain.N, vectPsiTime[4] / callMain.N);
+                Console.WriteLine("\t\t  Psi: [{0}, {1}, {2}, {3}]", vectPsiTime[0], vectPsiTime[1], vectPsiTime[2], vectPsiTime[3]); 
 
                 Quaternion resLambda = RungeKutta.Run(vectPsiTime, callMain); // обращение к метду РК
-
-                Console.WriteLine("%%%%%%%%%%%%%%\nafter RK:");
-                resLambda.printMagnitude();
-                Console.WriteLine("Lambda t=0:");
-                callMain.Lambda0.printMagnitude();
+                Console.WriteLine("\t\t  norm before: {0}, norm after: {1}", callMain.Lambda0.getMagnitude(), resLambda.getMagnitude());
+                
+                // обращение к методам подсчета невязки
+                
                 
 
-                // обращение к методам подсчета невязки, и пересчета поправки
-                Quaternion difference = countR(resLambda, callMain.LambdaT);
 
-                Console.WriteLine("result difference: ");
-                difference.print();
-
-                delta = delta; // поправки которые мы нашли
                 newtonItaration++;
 
-            } while (delta.norm() > callMain.Epsilon);
+            } while (false);
+            Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         }
+
+
+        private void  Hamilton(){}
 
         private Quaternion countR(Quaternion lambdaArpox, Quaternion lambdaExact) // считает невязку
         {

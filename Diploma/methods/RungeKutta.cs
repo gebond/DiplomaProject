@@ -17,7 +17,7 @@ namespace Diploma.methods
              * vect[4] == Time
              * */
 
-            Console.WriteLine("\t\t\t RK");
+            Console.WriteLine("\t\t\t * RK started");
             double Time = vectPsitime[4];
             h = Time/callMain.N; // посчитали шаг
 
@@ -66,7 +66,8 @@ namespace Diploma.methods
                 psi_k = psi_k_next;
                 lam_k = lam_k_next;
             }
-            
+
+            Console.WriteLine("\t\t\t * RK finished");
             return lam_k;
         }
 
