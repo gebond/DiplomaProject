@@ -20,7 +20,7 @@ namespace Diploma
 
             double epsilon = 0.01;
             int n = 100;
-            double T_start = 103.0;
+            double T_start = 10.0;
             IVector Omega = new Vector(new double[] {-1.0, 1.0});
             
 

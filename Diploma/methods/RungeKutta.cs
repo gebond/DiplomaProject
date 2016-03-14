@@ -65,8 +65,16 @@ namespace Diploma.methods
 
                 psi_k = psi_k_next;
                 lam_k = lam_k_next;
-            }
+                if (k == callMain.N - 1)
+                {
+                    Console.Write("\t\t\t * RK hamilton: ");
+                    Quaternion ham = psi_k * (0.5 * (lam_k % omega_k));
+                    ham.print();
+                    Console.Write("\t\t\t * RK lambda: ");
+                    lam_k.print();
+                }
 
+            }
             Console.WriteLine("\t\t\t * RK finished");
             return lam_k;
         }

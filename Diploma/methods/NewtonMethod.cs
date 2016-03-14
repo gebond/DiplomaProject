@@ -9,7 +9,7 @@ namespace Diploma.methods
         
         private MainProblem callMain;
         double del = 0.00000001; // дельта для метода 
-        PsiTime psiTime = new PsiTime(); // кватернион + время
+        PsiTime psiTime;// кватернион + время
         Vector N_old = new Vector(5); // невязка на шаге метода ньютона
         HashSet<double> xi = new HashSet<double> { 1.0, 0.5, 0.25, 0.125, 0.0625, 0.03125, 0.15625, 0.0078125 }; // коэффициенты хи
 
@@ -23,16 +23,16 @@ namespace Diploma.methods
              * vect[0,1,2,3] = Psi[0,1,2,3]
              * vect[4] == Time
              * */
-            psiTime.psi = psiStart;
-            psiTime.T = T_start;
+            psiTime = new PsiTime(psiStart, T_start);
         }
 
         public void RunProcess()
         {
             Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Newton %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
             int newtonItaration = 1;
-            do
+            for (int i = 0; i < 10; i++)
             {
+                
                 Console.WriteLine("\n\t\t* Newton {0} iteration:", newtonItaration);
                 while ((double) psiTime.T / callMain.N >= 0.0011) // проверяем будет ли ШАГ <= 0.5
                 {
@@ -46,12 +46,13 @@ namespace Diploma.methods
                 
                 // обращение к методам подсчета невязки
 
-                Quaternion res = null;
+                //Quaternion res = - 1 + psiTime.psi*(0.5 * (resLambda % ));
 
 
                 newtonItaration++;
+                psiTime.T += 10;
 
-            } while (false);
+            }
             Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         }
 
