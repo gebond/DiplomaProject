@@ -10,7 +10,6 @@ namespace Diploma.methods
         private MainProblem callMain;
         double del = 0.00000001; // дельта для метода 
         PsiTime psiTime;// кватернион + время
-        Vector N_old = new Vector(5); // невязка на шаге метода ньютона
         HashSet<double> xi = new HashSet<double> { 1.0, 0.5, 0.25, 0.125, 0.0625, 0.03125, 0.15625, 0.0078125 }; // коэффициенты хи
 
 
@@ -29,37 +28,52 @@ namespace Diploma.methods
         public void RunProcess()
         {
             Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Newton %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-            int newtonItaration = 1;
-            for (int i = 0; i < 10; i++)
+
+            for (int k = 0; k < 4; k++)
             {
-                Console.WriteLine("\n\t\t* Newton {0} iteration:", newtonItaration);
+                Console.WriteLine("\n\t\t* Newton {0} iteration:", k);
                 while ((double) psiTime.T / callMain.N >= 0.0011) // проверяем будет ли ШАГ <= 0.5
                 {
                     callMain.N *= 2; // дробим количество шагов  если условие выполнилось
                 }
-                Console.WriteLine("\t\t  params: T = {0}, n = {1}, h = {2}", psiTime.T, callMain.N, psiTime.T / callMain.N);
-                Console.Write("\t\t  Psi:"); psiTime.psi.print(); 
-
-                Quaternion resLambda = RungeKutta.Run(psiTime, callMain); // обращение к метду РК
-                Console.WriteLine("\t\t  norm before: {0}, norm after: {1}", callMain.Lambda0.getMagnitude(), resLambda.getMagnitude());
+                //Console.WriteLine("\t\t  params: T = {0}, n = {1}, h = {2}", psiTime.T, callMain.N, psiTime.T / callMain.N);
+                //Console.Write("\t\t  Psi:"); psiTime.psi.print(); 
+                //Console.WriteLine("\t\t  norm before: {0}, norm after: {1}", callMain.Lambda0.getMagnitude(), resLambda.getMagnitude());
                 
                 // обращение к методам подсчета невязки
 
-                //Quaternion res = - 1 + psiTime.psi*(0.5 * (resLambda % ));
-
-
-                newtonItaration++;
-                psiTime.T += 10;
-
+                Vector N0 = countN(psiTime.psi, psiTime.T);
+                Vector[] Nmass = new Vector[5];
+                for (int i = 0; i < 5; i++)
+                {
+                    if (i == 0)
+                    {
+                        Nmass[i] = countN(psiTime.psi, psiTime.T + del);
+                        continue;
+                    }
+                    psiTime.psi[i] += del;
+                    Nmass[i] = countN(psiTime.psi, psiTime.T);
+                    psiTime.psi[i] -= del;
+                }
+                Console.Write("\t\t calculated vectorN: "); N
             }
             Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         }
 
-
-        private void  Hamilton(){
-            
+        private Vector countN(Quaternion psi, double T)
+        {
+            Vector Nres = new Vector(5);
+            // обращение к РК для получения кватерниона на конце
+            // results = <lambda, hamilton>
+            Tuple< Quaternion, double> results = RungeKutta.Run(psiTime, callMain);
+            Quaternion diff = results.Item1 - callMain.LambdaT;
+            for (int i = 0; i < 4; i++)
+            {
+                Nres[i] = diff[i]; // копируем весь кватернион разницы
+            }
+            Nres[4] = results.Item2; // последняя позиция - это значение функции гамильтона в полученной системе РК
+            return Nres;
         }
-
         private Quaternion countR(Quaternion lambdaArpox, Quaternion lambdaExact) // считает невязку
         {
             Quaternion res = Quaternion.Abs(lambdaArpox - lambdaExact) ;

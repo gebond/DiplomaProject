@@ -9,7 +9,7 @@ namespace Diploma.methods
 
         private static double h;
         
-        public static Quaternion Run(PsiTime psitime, MainProblem callMain)
+        public static Tuple<Quaternion, double> Run(PsiTime psitime, MainProblem callMain)
         {
             /**
              * Vector vectPsiTime = [Quaternion Psi, Time]
@@ -17,7 +17,7 @@ namespace Diploma.methods
              * vect[4] == Time
              * */
 
-            Console.WriteLine("\t\t\t * RK started");
+            Console.WriteLine("\t\t\t * RK ~~~");
             double Time = psitime.T;
             h = Time/callMain.N; // посчитали шаг
 
@@ -53,30 +53,16 @@ namespace Diploma.methods
                  * теперь необходимо посчитать коэффициенты к1...к4 для Р-К и получть следующее приближение
                  * c помощью метода calcNext
                  * */
-                /*
-                Console.WriteLine("K={0}", k);
-                Console.Write("RK: omeg  "); omega_k.print();
-                Console.Write("RK: lambda  ");  lam_k.print();
-                Console.Write("RK: psi  "); psi_k.print();
-                */
 
                 Quaternion psi_k_next = RungeKutta.сalcNext(psi_k, omega_k, k);
                 Quaternion lam_k_next = RungeKutta.сalcNext(lam_k, omega_k, k);
 
                 psi_k = psi_k_next;
                 lam_k = lam_k_next;
-                if (k == callMain.N - 1)
-                {
-                    Console.Write("\t\t\t * RK hamilton: ");
-                    Quaternion ham = psi_k * (0.5 * (lam_k % omega_k));
-                    ham.print();
-                    Console.Write("\t\t\t * RK lambda: ");
-                    lam_k.print();
-                }
-
             }
-            Console.WriteLine("\t\t\t * RK finished");
-            return lam_k;
+
+            double resHamilton = Hamiltonian(psi_k, omega_k, lam_k);
+            return new Tuple<Quaternion, double>(lam_k, resHamilton);
         }
 
         /**
@@ -88,7 +74,10 @@ namespace Diploma.methods
             Quaternion res = (1.0 / 2.0) * (x % omeg);
             return res;
         }
-
+        private static double Hamiltonian(Quaternion psi, Quaternion omegaopt, Quaternion lambda)
+        {
+            return -1 + psi / (0.5 * (lambda % omegaopt));
+        }
         private static Quaternion сalcNext(Quaternion x, Quaternion omeg, int k)
         {
             Quaternion k1 = h * func(x, omeg, k * h);

@@ -216,6 +216,11 @@ namespace Diploma.entity
         {
             return new Quaternion(q1.W * q2.W, q1.X * q2.X, q1.Y * q2.Y, q1.Z * q2.Z);
         } // и все таки скалярное произведение
+
+        public static double operator /(Quaternion q1, Quaternion q2)
+        {
+            return q1.W * q2.W + q1.X * q2.X + q1.Y * q2.Y + q1.Z * q2.Z;
+        } // и все таки скалярное произведение
         public static Quaternion operator *(Quaternion q, Vector3 v)
         {
             var q2 = new Quaternion(0.0, v.X, v.Y, v.Z);
