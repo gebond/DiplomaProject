@@ -32,7 +32,6 @@ namespace Diploma.methods
             int newtonItaration = 1;
             for (int i = 0; i < 10; i++)
             {
-                
                 Console.WriteLine("\n\t\t* Newton {0} iteration:", newtonItaration);
                 while ((double) psiTime.T / callMain.N >= 0.0011) // проверяем будет ли ШАГ <= 0.5
                 {

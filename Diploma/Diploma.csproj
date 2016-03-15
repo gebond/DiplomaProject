@@ -48,6 +48,7 @@
     <Compile Include="entity\Matrix.cs" />
     <Compile Include="entity\PsiTime.cs" />
     <Compile Include="entity\Quaternion.cs" />
+    <Compile Include="entity\SLAU.cs" />
     <Compile Include="entity\Vector.cs" />
     <Compile Include="entity\Vector3.cs" />
     <Compile Include="methods\MainProblem.cs" />

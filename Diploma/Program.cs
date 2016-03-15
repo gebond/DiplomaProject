@@ -25,8 +25,26 @@ namespace Diploma
             
 
             MainProblem main = new MainProblem(Quat0, QuatT, epsilon, psiStart, T_start, n, Omega);
-            main.start();
+            //main.start();
             //main.printCurrentParameters();
+
+            //double[,] A = new double[,] {{0, 2, -1, 1}, {-1, 2, 4, 19}, {15, 1, 2, 1}, {4, 1, -5, 0}};
+            //double[] b = new double[] {-1, 3, 15, 0};
+
+            double[,] A = new double[,] { { 1, 2 ,4}, { 1, 3 ,-5}, {7, 2, 0 }};
+            double[] b = new double[] { 3, 2, 9 };
+
+            //double[,] A = new double[,] {{1, 2}, {1, 3}};
+            //double[] b = new double[] {3, 2};
+
+            //double[,] A = new double[1,1] {{2}};
+            //double[] b = new double[] {3};
+            
+            SLAU newSlau = new SLAU(A, b, 0.001);
+            newSlau.print();
+            Vector res = newSlau.getResult();
+            Console.WriteLine("\n\n\n%%%%%%%%%");
+            res.print();
 
             Console.Write("\n\n\n\n\n\t\t\tEnter an key to exit... ");
             Console.ReadKey();
