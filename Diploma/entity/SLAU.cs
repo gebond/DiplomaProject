@@ -41,7 +41,6 @@ namespace Diploma.entity
            
             for (int k = 0; k < dim; k++)
 			{
-                Console.WriteLine("step " + k);
                 findMax(k, k); // нашли главный элемент и заменили столбцы и строки друг на друга, запомнили в стек замену строк
                 
                 for (int i = k + 1; i < dim; i++)
@@ -53,8 +52,6 @@ namespace Diploma.entity
                     }
                     b[i] = b[i] - q_i * b[k];        
                 }
-                Console.WriteLine("after counting system");
-                print();
 			}
             // далее обратный ход
             for (int i = dim - 1; i > -1; i--)
@@ -72,15 +69,18 @@ namespace Diploma.entity
                 x[i] = (b[i] - sum ) / A[i, i];
             }
 
-            //необходимо вернуть порядок строк в векторе х
-            /*var currentIndex = dim - 1;
+            //необходимо вернуть порядок столбцов в векторе х
+            var currentIndex = dim - 1;
             foreach (var item in logChanges)
             {
-                var tmp = x[currentIndex];
-                x[currentIndex] = x[item];
-                x[item] = tmp;
+                if (item != -1)
+                {
+                    var tmp = x[currentIndex];
+                    x[currentIndex] = x[item];
+                    x[item] = tmp;
+                }
                 currentIndex--;
-            }*/
+            }
         }
         
         private void findMax(int cur_i, int cur_j) 
@@ -100,11 +100,24 @@ namespace Diploma.entity
                     
                 }
             }
-            changeRow(cur_i, max_i);
-            changeTab(cur_j, max_j);
-            logChanges.Push(max_i);
-            Console.WriteLine("*after finding max and mix");
-            print();
+            if (cur_i == max_i)
+            {
+                if (cur_j == max_j)
+                {
+                    logChanges.Push(-1);
+                }
+                else
+                {
+                    changeTab(cur_j, max_j);
+                    logChanges.Push(max_j);
+                }
+            }
+            else
+            {
+                changeRow(cur_i, max_i);
+                changeTab(cur_j, max_j);
+                logChanges.Push(max_j);
+            }
         }
         private void changeRow(int up_i, int down_i) 
         {
@@ -129,7 +142,6 @@ namespace Diploma.entity
             }
         }
 
-
         public void print() 
         {
             try
@@ -138,7 +150,7 @@ namespace Diploma.entity
                 {
                     if (i == 0)
                     {
-                        System.Console.WriteLine("Matrix:");
+                        System.Console.WriteLine("SLAU:");
                     }
 
                     for (int j = 0; j < dim; j++)
