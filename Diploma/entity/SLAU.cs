@@ -37,7 +37,7 @@ namespace Diploma.entity
             b = new Vector(b);
             x = new Vector(dim);
             logChanges = new Stack<int>();
-            if ((dim * dim != A.length))
+            if ((dim != A.length))
             {
                 throw new Exception("try to solve different dimension!");
             }

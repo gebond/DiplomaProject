@@ -61,15 +61,28 @@ namespace Diploma.methods
                 Console.Write("\t\t resulted matrix of N:"); 
                 Matrix Nmatr = new Matrix(Nmass);
                 Nmatr.print();
-
-
+                SLAU slau = createSLAU(Nmatr, N0, callMain.Epsilon);
+                slau.print();
             }
             Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         }
         private Matrix createNmatrixForSLau(Matrix N, Vector N0)
         {
-            Ma
-            return 
+            Matrix res = new Matrix((short)N0.length);
+            for (int i = 0; i < res.length; i++)
+            {
+                for (int j = 0; j < res.length; j++)
+                {
+                    res[i, j] = N[i, j] - N0[i] / del;
+                }
+            }
+            return res;
+        }
+        private SLAU createSLAU(Matrix N, Vector N0, double precision)
+        {
+            var Nslau = createNmatrixForSLau(N, N0);
+            var resSlau = new SLAU(Nslau, (-1) * N0, precision);
+            return resSlau;
         }
         private Vector countN(Quaternion psi, double T)
         {
