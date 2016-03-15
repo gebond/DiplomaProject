@@ -16,11 +16,11 @@ namespace Diploma
 
             Quaternion Quat0 = new Quaternion(1.0, 1.0, 1.0, 1.0);
             Quaternion QuatT = new Quaternion(1.0, 1.0, 2.0, 3.0);
-            Quaternion psiStart = new Quaternion(1.0, 1.0, 1.0, 1.0);
+            Quaternion psiStart = new Quaternion(1.0, 2, 3, 4);
 
             double epsilon = 0.01;
             int n = 100;
-            double T_start = 10.0;
+            double T_start = 10;
             IVector Omega = new Vector(new double[] {-1.0, 1.0});
             
 

@@ -33,8 +33,8 @@ namespace Diploma.entity
         {
             eps = epsilon;
             dim = A.length;
-            A = new Matrix(A);
-            b = new Vector(b);
+            this.A = new Matrix(A);
+            this.b = new Vector(b);
             x = new Vector(dim);
             logChanges = new Stack<int>();
             if ((dim != A.length))
@@ -179,7 +179,7 @@ namespace Diploma.entity
             }
             catch (NullReferenceException)
             {
-                Console.WriteLine("Empty Vect massive!");
+                Console.WriteLine("Empty some massive!");
             }
         }
     }

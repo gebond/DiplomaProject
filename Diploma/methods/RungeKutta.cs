@@ -17,7 +17,7 @@ namespace Diploma.methods
              * vect[4] == Time
              * */
 
-            Console.WriteLine("\t\t\t * RK ~~~");
+            Console.Write("\n\t\t\t * RK ~~~");
             double Time = psitime.T;
             h = Time/callMain.N; // посчитали шаг
 
@@ -60,7 +60,7 @@ namespace Diploma.methods
                 psi_k = psi_k_next;
                 lam_k = lam_k_next;
             }
-
+            Console.WriteLine(" norm before: {0}, norm after: {1}", callMain.Lambda0.getMagnitude(), lam_k.getMagnitude());
             double resHamilton = Hamiltonian(psi_k, omega_k, lam_k);
             return new Tuple<Quaternion, double>(lam_k, resHamilton);
         }

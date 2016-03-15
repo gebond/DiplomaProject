@@ -9,8 +9,8 @@ namespace Diploma.methods
         
         private MainProblem callMain;
         double del = 0.00000001; // дельта для метода 
-        PsiTime psiTime;// кватернион + время
-        HashSet<double> xi = new HashSet<double> { 1.0, 0.5, 0.25, 0.125, 0.0625, 0.03125, 0.15625, 0.0078125 }; // коэффициенты хи
+        PsiTime psiTime;// кватернион + время - ЗАДАЧА НАХОЖДЕНИЯ!!!!
+        List<double> xi = new List<double> { 0.5, 0.25}; // коэффициенты хи
 
 
         public NewtonMethod(MainProblem CallFrom, Quaternion psiStart, double T_start)
@@ -29,42 +29,95 @@ namespace Diploma.methods
         {
             Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Newton %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 
-            for (int k = 0; k < 4; k++)
+            var k = 1;
+            while (true)
             {
                 Console.WriteLine("\n\t\t* Newton {0} iteration:", k);
                 while ((double) psiTime.T / callMain.N >= 0.0011) // проверяем будет ли ШАГ <= 0.5
                 {
                     callMain.N *= 2; // дробим количество шагов  если условие выполнилось
                 }
-                //Console.WriteLine("\t\t  params: T = {0}, n = {1}, h = {2}", psiTime.T, callMain.N, psiTime.T / callMain.N);
-                //Console.Write("\t\t  Psi:"); psiTime.psi.print(); 
-                //Console.WriteLine("\t\t  norm before: {0}, norm after: {1}", callMain.Lambda0.getMagnitude(), resLambda.getMagnitude());
+                
                 
                 // обращение к методам подсчета невязки
 
-                Vector N0 = countN(psiTime.psi, psiTime.T);
+                Vector N0 = countN();
                 Vector[] Nmass = new Vector[5];
                 for (int i = 0; i < 5; i++)
                 {
                     if (i == 0)
                     {
-                        Nmass[i] = countN(psiTime.psi, psiTime.T + del);
+                        psiTime.T += del;
+                        Nmass[i] = countN();
+                        psiTime.T -= del;
                     }
                     else
                     {
                         psiTime.psi[i] += del;
-                        Nmass[i] = countN(psiTime.psi, psiTime.T);
+                        Nmass[i] = countN();
                         psiTime.psi[i] -= del;
                     }
                 }
-                Console.Write("\t\t calculated vectorN0: "); N0.print();
-                Console.Write("\t\t resulted matrix of N:"); 
+                Console.Write("\n\t\tN0: "); N0.print();
+                //Console.Write("\n\t\t resulted matrix of N:"); 
+                // составляем матрицу 5х5 - невязки
                 Matrix Nmatr = new Matrix(Nmass);
-                Nmatr.print();
+                //Nmatr.print();
+                // составляем СЛАУ по невязкам с учетом нулевой невязки
                 SLAU slau = createSLAU(Nmatr, N0, callMain.Epsilon);
-                slau.print();
+                //Console.Write("\n\t\t system to solve:"); //slau.print();
+                // РЕШАЕМ ОТНОСИТЕЛЬНО поправок
+                Vector corrects = slau.getResult();
+                Console.Write("\n\t\tcorrects:");corrects.print();
+                // составляем следующее приближение при xi = 1
+                upgradePsiTime(corrects, 1);
+                // необходимо проверить как изменилась невязка N next
+                Vector Nnext = countN();
+                var countxi = 0;
+                while(Nnext.norm() > N0.norm())
+                {
+                    try
+                    {
+                        Console.Write("\n\t\tNext {0}; Pre= {1}", Nnext.norm(), N0.norm());
+                        Console.Write("\n\t\t fault -> try to upgrade PsiTime with xi = " + xi[countxi]);
+                        upgradePsiTime(corrects, xi[countxi]);
+                        Nnext = countN();
+                        countxi++;
+                    }
+                    catch (Exception ex)
+                    {
+                        xi.Add(xi[countxi-1] / 2);
+                        if (countxi > 10)
+                        {
+                            Console.Write("Can't resolve this :(");
+                            Console.ReadKey();
+                        }
+                    }
+
+                }
+                Console.WriteLine("\t%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                Console.Write("\n\t\t OK SEE CURRENT T= {0}; Psi=", psiTime.T); psiTime.psi.print();
+                Console.WriteLine("\t\t newnorm =" + Nnext.norm() + "oldnorm = " + N0.norm());
+                Console.WriteLine("\n\t%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                k++;
             }
             Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        }
+
+        private void upgradePsiTime(Vector corrects, double xi)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                if (i == 0)
+                {
+                    psiTime.T += xi * corrects[i];
+                }
+                else
+                {
+                    psiTime.psi[i] += xi * corrects[i];
+                }
+            }
+
         }
         private Matrix createNmatrixForSLau(Matrix N, Vector N0)
         {
@@ -84,7 +137,7 @@ namespace Diploma.methods
             var resSlau = new SLAU(Nslau, (-1) * N0, precision);
             return resSlau;
         }
-        private Vector countN(Quaternion psi, double T)
+        private Vector countN()
         {
             Vector Nres = new Vector(5);
             // обращение к РК для получения кватерниона на конце
