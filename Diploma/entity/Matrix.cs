@@ -29,12 +29,25 @@ namespace Diploma.entity
         }
         public Matrix(Matrix m)
         {
-            matr = new double[m.length, m.length];
+            dim = m.length;
+            matr = new double[dim, dim];
             for (int i = 0; i < dim; i++)
             {
                 for (int j = 0; j < dim; j++)
                 {
                     matr[i, j] = m[i, j];
+                }
+            }
+        }
+        public Matrix(Vector[] vmass)
+        {
+            dim = (short)vmass.Length;
+            matr = new double[dim, dim];
+            for (int i = 0; i < dim; i++)
+            {
+                for (int j = 0; j < dim; j++)
+                {
+                    matr[i, j] = vmass[i][j];
                 }
             }
         }

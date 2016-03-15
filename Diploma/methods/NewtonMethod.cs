@@ -49,17 +49,28 @@ namespace Diploma.methods
                     if (i == 0)
                     {
                         Nmass[i] = countN(psiTime.psi, psiTime.T + del);
-                        continue;
                     }
-                    psiTime.psi[i] += del;
-                    Nmass[i] = countN(psiTime.psi, psiTime.T);
-                    psiTime.psi[i] -= del;
+                    else
+                    {
+                        psiTime.psi[i] += del;
+                        Nmass[i] = countN(psiTime.psi, psiTime.T);
+                        psiTime.psi[i] -= del;
+                    }
                 }
-                Console.Write("\t\t calculated vectorN: "); N
+                Console.Write("\t\t calculated vectorN0: "); N0.print();
+                Console.Write("\t\t resulted matrix of N:"); 
+                Matrix Nmatr = new Matrix(Nmass);
+                Nmatr.print();
+
+
             }
             Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         }
-
+        private Matrix createNmatrixForSLau(Matrix N, Vector N0)
+        {
+            Ma
+            return 
+        }
         private Vector countN(Quaternion psi, double T)
         {
             Vector Nres = new Vector(5);

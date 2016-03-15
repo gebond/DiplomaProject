@@ -84,7 +84,10 @@ namespace Diploma.entity
             }
             return res;
         }
-
+        public int length
+        {
+            get { return vect.Length; }
+        }
         public void print()
         {
             try

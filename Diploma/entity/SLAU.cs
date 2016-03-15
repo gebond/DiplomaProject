@@ -29,6 +29,19 @@ namespace Diploma.entity
                 throw new Exception("try to solve different dimension!");
             }
         }
+        public SLAU(Matrix A, Vector b, double epsilon)
+        {
+            eps = epsilon;
+            dim = A.length;
+            A = new Matrix(A);
+            b = new Vector(b);
+            x = new Vector(dim);
+            logChanges = new Stack<int>();
+            if ((dim * dim != A.length))
+            {
+                throw new Exception("try to solve different dimension!");
+            }
+        }
 
         public Vector getResult() 
         {
