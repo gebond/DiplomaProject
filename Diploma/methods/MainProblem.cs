@@ -85,11 +85,10 @@ namespace Diploma.methods
             Console.WriteLine("\t\tepsilon = {0}", eps);
             Console.WriteLine("\t\tn = {0}", n);
             Console.WriteLine("\t\tt=0:");
-            Console.Write("\t\t");
-            lambda0.print();
+            Console.Write("\t\t"); lambda0.print();
+            Console.Write("\t\t"); lambda0.printMagnitude();
             Console.WriteLine("\t\tt=T:");
-            Console.Write("\t\t");
-            lambdaT.print();
+            Console.Write("\t\t"); lambdaT.print();
         }
 
 

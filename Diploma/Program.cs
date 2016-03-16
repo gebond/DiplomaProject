@@ -14,9 +14,9 @@ namespace Diploma
         {
             Console.WriteLine("\t\t\tStart of application");
 
-            Quaternion Quat0 = new Quaternion(1.0, 1.0, 1.0, 1.0);
-            Quaternion QuatT = new Quaternion(1.0, 1.0, 2.0, 3.0);
-            Quaternion psiStart = new Quaternion(1.0, 2, 3, 4);
+            Quaternion Quat0 = new Quaternion(1.0, 0, 0, 0.0);
+            Quaternion QuatT = new Quaternion(2.0, 2.0, 2.0, 2.0);
+            Quaternion psiStart = new Quaternion(1.0, 1.0, 1.0, 1.0);
 
             double epsilon = 0.01;
             int n = 100;

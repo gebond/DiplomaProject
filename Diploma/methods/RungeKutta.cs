@@ -33,20 +33,21 @@ namespace Diploma.methods
 
                 omega_k[0] = 0;
 
-                double dHdm1 = (1.0 / 2.0) * (- psi_k[0] * lam_k[1] + psi_k[1] * lam_k[0] + psi_k[2] * lam_k[3] - 
+                double dHdm1 = (1.0 / 2.0) * (0 - psi_k[0] * lam_k[1] + psi_k[1] * lam_k[0] + psi_k[2] * lam_k[3] - 
                                 psi_k[3] * lam_k[2]);
 
                 omega_k[1] = (dHdm1 >= 0 )? callMain.OmegaMax: callMain.OmegaMin;
 
-                double dHdm2 = (1.0 / 2.0) * (psi_k[0] * lam_k[2] + psi_k[2] * lam_k[0] + psi_k[3] * lam_k[1] - 
+                double dHdm2 = (1.0 / 2.0) * (0 - psi_k[0] * lam_k[2] + psi_k[2] * lam_k[0] + psi_k[3] * lam_k[1] - 
                                 psi_k[1] * lam_k[3]);
 
-                omega_k[2] = (dHdm2 >= 0) ? callMain.OmegaMax : callMain.OmegaMin; 
+                omega_k[2] = (dHdm2 >= 0) ? callMain.OmegaMax : callMain.OmegaMin;
 
-                double dHdm3 = (1.0 / 2.0) * (psi_k[0] * lam_k[3] + psi_k[1] * lam_k[2] + psi_k[3] * lam_k[0] - 
+                double dHdm3 = (1.0 / 2.0) * (0 - psi_k[0] * lam_k[3] + psi_k[1] * lam_k[2] + psi_k[3] * lam_k[0] - 
                                 psi_k[2] * lam_k[1]);
 
                 omega_k[3] = (dHdm3 >= 0) ? callMain.OmegaMax : callMain.OmegaMin;
+
                 /*
                  * составлен кватернион omega(opt) для текущего шага k
                  * 
@@ -60,7 +61,7 @@ namespace Diploma.methods
                 psi_k = psi_k_next;
                 lam_k = lam_k_next;
             }
-            Console.WriteLine(" norm before: {0}, norm after: {1}", callMain.Lambda0.getMagnitude(), lam_k.getMagnitude());
+            Console.WriteLine("norm after: {0}", lam_k.getMagnitude());
             double resHamilton = Hamiltonian(psi_k, omega_k, lam_k);
             return new Tuple<Quaternion, double>(lam_k, resHamilton);
         }
@@ -86,7 +87,5 @@ namespace Diploma.methods
             Quaternion k4 = h * func(x + k3, omeg, k * h + h);
             return x + (1.0 / 6.0) * (k1 + 2.0 * k2 + 2.0 * k3 + k4);
         }
-
-
     }
 }
