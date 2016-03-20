@@ -79,6 +79,28 @@ namespace Diploma.entity
                 Console.WriteLine("Empty Vect massive!");
             }
         }
+
+        public string ToString(int tabAmount)
+        {
+            String tab = "";
+            for (int i = 0; i < tabAmount + 1; i++)
+            {
+                tab += '\t';
+            }
+
+            String result = "";
+            for (int i = 0; i < length; i++)
+            {
+                result += tab;
+                for (int j = 0; j < length; j++)
+                {
+                    result += String.Format("{0,20:0.00000000}   ", matr[i, j]);
+                }
+                result += '\n';
+            }
+            return result;
+        }
+
         public short length
         {
             get { return dim; }

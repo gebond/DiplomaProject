@@ -16,11 +16,11 @@ namespace Diploma.methods
              * vect[4] == Time
              * */
 
-            Console.Write("\n\t\t\t * RK ");
+            Console.Write("\n\t\t\t  ~~~ МЕТОД РУНГЕ КУТТЫ ПРИ ");
             double Time = psitime.T; // взято время Т
             h = Time / callMain.N; // посчитан шаг
-            Console.Write("N = {0}, h = {1}, T = {2} \n", callMain.N, h, Time);
-            Console.Write("\t\t\tPSI :"); psitime.psi.print();
+            Console.WriteLine("" + psitime.ToString());
+            Console.Write("\t\t\t  ~~~ n={0} h={1} ", callMain.N, h);
 
             Quaternion lam_k = callMain.Lambda0; // получено начальное lam0
             Quaternion psi_k = new Quaternion(psitime.psi); // получен psi0
@@ -67,14 +67,10 @@ namespace Diploma.methods
                 //Console.Write("psi_next= "); psi_k.print();
                 //Console.Write("omega_next = "); omega_k.print();
             }
-            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            Console.WriteLine("norm after: {0}", lam_k.getMagnitude());
+            Console.WriteLine("\n\t\t\t  ~~~ РЕЗУЛЬТАТЫ:\n\t\t\t  ~~~ НОРМА ПОСЛЕ: {0} НОРМА ДО: {1}", lam_k.getMagnitude(), callMain.Lambda0.getMagnitude());
+            Console.WriteLine("\t\t\t  ~~~ ПОЛУЧЕНО lambda(T) = {0}\n\t\t\t  ~~~ ЗАДАЧА lambda(T) = {1}", lam_k.ToString(), callMain.LambdaT.ToString());
 
             double resHamilton = Hamiltonian(psi_k, omega_k, lam_k);
-            Console.WriteLine("Hamilton = " + resHamilton);
-            Console.Write("ResLambda = "); lam_k.print();
-            Console.Write("Difference = "); (lam_k - callMain.LambdaT).print();
-            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             return new Tuple<double, Quaternion>(resHamilton, lam_k);
         }
 

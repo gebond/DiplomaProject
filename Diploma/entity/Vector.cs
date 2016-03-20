@@ -124,6 +124,21 @@ namespace Diploma.entity
             }
         }
 
+        public override string ToString()
+        {
+            String result = "[";
+            for (int i = 0; i < vect.Length; i++)
+            {
+                result += vect[i];
+                if(i != vect.Length - 1)
+                {
+                    result += ", "; 
+                }
+            }
+            result += "]";
+            return result;
+        }
+
         public double this[int index]
         {
             get { return vect[index]; }

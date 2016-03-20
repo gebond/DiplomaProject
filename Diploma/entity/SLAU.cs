@@ -46,9 +46,31 @@ namespace Diploma.entity
         public Vector getResult() 
         {
             solve();
-            return x;
+            if(checkResult())
+            {
+                
+                return x;
+            }
+            else
+            {
+                Console.WriteLine("");
+                Console.ReadKey();
+                Environment.Exit(1);
+                return null;
+            }
         }
-
+        private bool checkResult()
+        {
+            bool correct = true;
+            for (int i = 0; i < dim; i++)
+            {
+                if(x[i] == null )
+                {
+                    correct = false;
+                }
+            }
+            return correct;
+        }
         private void solve()
         {
            
@@ -155,27 +177,43 @@ namespace Diploma.entity
             }
         }
 
+        public string ToString(int tabAmount)
+        {
+            try
+            {
+                String tab = "";
+                for (int i = 0; i < tabAmount + 1; i++)
+                {
+                    tab += '\t';
+                }
+
+                String result = "";
+                for (int i = 0; i < dim; i++)
+                {
+                    result += tab;
+                    for (int j = 0; j < dim; j++)
+                    {
+                        result += String.Format("{0,20:0.00000000}   ", A[i, j]);
+                        if (j == dim - 1)
+                        {
+                            result += String.Format("|{0,15:0.00000000}", b[i]);
+                        }
+                    }
+                    result += '\n';
+                }
+                return result;
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("Empty some massive!");
+                return null;
+            }
+        }
+
         public void print() 
         {
             try
             {
-                for (int i = 0; i < dim; i++)
-                {
-                    if (i == 0)
-                    {
-                        System.Console.WriteLine("SLAU:");
-                    }
-
-                    for (int j = 0; j < dim; j++)
-                    {
-                        if (j == 0)
-                        {
-                            System.Console.Write("\t");
-                        }
-                        Console.Write("\t {0:0.####}", A[i, j]);
-                    }
-                    Console.WriteLine("\t|  {0:0.####}", b[i]);
-                }
             }
             catch (NullReferenceException)
             {

@@ -25,7 +25,7 @@ namespace Diploma
 
 
             MainProblem main = new MainProblem(LAMBDA_0, LAMBDA_T, PSI, T, N, new Vector(new double[2] { -1, 1 }), eps);
-            main.printCurrentParameters();
+
             NewtonMethod newton = new NewtonMethod(main, PSI, T);
             newton.RunProcess();
 

@@ -187,6 +187,11 @@ namespace Diploma.entity
             System.Console.WriteLine("Magnitude: " + this.getMagnitude() + ";");
         }
 
+        public override string ToString()
+        {
+            return "[" + this.w + ",(" + this.v.X + ", " + this.v.Y + ", " + this.v.Z + ")]";
+        }
+
         public static Quaternion Abs(Quaternion toAbs)
         {
             return new Quaternion(Math.Abs(toAbs.w), Math.Abs(toAbs.X), Math.Abs(toAbs.Y), Math.Abs(toAbs.Z));
