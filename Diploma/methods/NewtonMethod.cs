@@ -8,9 +8,11 @@ namespace Diploma.methods
     {        
         
         private MainProblem callMain;
-        double del = 0.000001; // дельта для метода 
-        PsiTime currentPsiTime;// кватернион + время - ЗАДАЧА НАХОЖДЕНИЯ!!!!
-        List<double> xi = new List<double> { 1.0, 0.5, 0.25, 0.125}; // коэффициенты хи
+        double delT = 0.1; // дельта для T
+        double delPsi = 0.01;
+        PsiTime currentPsiTime;// кватернион + время текущие ИСКОМОЕ ВРЕМЯ T
+
+        List<double> xi = new List<double> {1.0}; // коэффициенты хи
 
 
         public NewtonMethod(MainProblem CallFrom, Quaternion psiStart, double T_start)
@@ -29,21 +31,22 @@ namespace Diploma.methods
         {
             Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Newton %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
             var k = 1;
-            while (k<2)
+            while (k<3)
             {
                 Console.WriteLine("\n\t\t* Newton {0} iteration:", k);
-                while ((double) currentPsiTime.T / callMain.N >= 0.001) // проверяем будет ли ШАГ <= 0.5
+                while ((double) currentPsiTime.T / callMain.N >= 0.01) // проверяем будет ли ШАГ <= 0.01
                 {
                     callMain.N *= 2; // дробим количество шагов  если условие выполнилось
                 }
 
                 // cоставляем первую невязку
                 Vector N0 = countN(currentPsiTime);
-                Console.Write("\n\t\t N0: "); N0.print();
+                Console.Write("\n\t\t начальная невязка:");
+                Console.Write("\n\t\t N0: "); N0.print(); Console.Write("\t\t Norm:" + N0.norm());
 
                 // составляем СЛАУ по невязкам и решаем поправки
                 SLAU slau = createSLAU(N0, callMain.Epsilon);
-                Console.Write("\t\t slau:"); slau.print();
+                Console.Write("\t\t "); slau.print();
                 Vector corrects = slau.getResult();
                 Console.Write("\t\t cor: "); corrects.print();
 
@@ -60,14 +63,14 @@ namespace Diploma.methods
         {
             Console.WriteLine("\t%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
             Console.Write("\n\t\t OK SEE CURRENT T= {0}; Psi: ", currentPsiTime.T); currentPsiTime.psi.print();
-            Console.WriteLine("\t\t NEXT:" + Nnext.norm() + "OLD:" + N0.norm());
+            Console.WriteLine("\t\t ТЕПЕРЬ:" + Nnext.norm() + "  БЫЛО:" + N0.norm());
             Console.WriteLine("\n\t%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         }
-
         private void getNextAndChangePsiT(Vector corrects, Vector N0)
         {
             Vector Nnext = null;
             PsiTime tryPsiTime = currentPsiTime;
+
             var countxi = 0;
             do
             {
@@ -75,6 +78,7 @@ namespace Diploma.methods
                 {
                     tryPsiTime = upgradePsiTime(corrects, xi[countxi]);
                     Nnext = countN(tryPsiTime);
+                    Console.WriteLine("\t\t Nnext.norm = " + Nnext.norm());
                 }
                 catch (Exception ex)
                 {
@@ -102,7 +106,7 @@ namespace Diploma.methods
                 }
                 else
                 {
-                    res.psi[i] += xi * corrects[i];
+                    res.psi[i-1] += xi * corrects[i];
                 }
             }
             return res;
@@ -116,18 +120,21 @@ namespace Diploma.methods
                 if (i == 0)
                 {
                     var changedPsiTime = currentPsiTime;
-                    changedPsiTime.T += del;
+                    changedPsiTime.T += delT;
                     Nmass[i] = countN(changedPsiTime);
                 }
                 else
                 {
-                    var changedPsiTime = currentPsiTime;
-                    changedPsiTime.psi[i] += del;
+                    var changedPsiTime = new PsiTime(currentPsiTime.psi, currentPsiTime.T);
+                    Console.WriteLine("123123123123123");
+                    changedPsiTime.psi.print();
+                    changedPsiTime.psi[i-1] += delPsi;
                     Nmass[i] = countN(changedPsiTime);
                 }
             }
-            
-            return new Matrix(Nmass);
+            Matrix res = new Matrix(Nmass);
+            res.print();
+            return res;
 
         }
         private Matrix createNmatrixForSLau(Matrix N, Vector N0)
@@ -137,10 +144,16 @@ namespace Diploma.methods
             {
                 for (int j = 0; j < res.length; j++)
                 {
-                    res[i, j] = (N[i, j] - N0[i]) / del;
+                    if (i == 0)
+                    {
+                        res[i, j] = (N[i, j] - N0[i]) / delT;
+                    }
+                    else
+                    {
+                        res[i, j] = (N[i, j] - N0[i]) / delPsi;
+                    }
                 }
             }
-            res.print();
             return res;
         }
         private SLAU createSLAU(Vector N0, double precision)
@@ -154,19 +167,29 @@ namespace Diploma.methods
         {
             Vector Nres = new Vector(5);
             // обращение к РК для получения кватерниона на конце
-            // results = <lambda, hamilton>
-            Tuple< Quaternion, double> results = RungeKutta.Run(psiTimeRequest, callMain);
-            Console.Write("\t\t Ham: "  + results.Item2); 
-            //Console.Write("\t\t result.LambdaT: "); results.Item1.print();
-            Quaternion diff = results.Item1 - callMain.LambdaT;
+            // results = <hamilton, lambda>
+            Tuple<double, Quaternion> results = RungeKutta.Run(psiTimeRequest, callMain);
+
+            Nres[0] = results.Item1; //  это значение функции гамильтона в полученной системе РК
+            Quaternion diff = results.Item2 - callMain.LambdaT;
+            
             for (int i = 0; i < 4; i++)
             {
-                Nres[i] = diff[i]; // копируем весь кватернион разницы
+                Nres[i+1] = diff[i]; // копируем весь кватернион разницы
             }
-            Nres[4] = results.Item2; // последняя позиция - это значение функции гамильтона в полученной системе РК
-            Console.Write("\n\t\t find N"); Nres.print();
+            results.Item2.print();
+            Nres.print();
+            Console.WriteLine (Nres.norm());
             return Nres;
         }
-        
+        private double SummAbs(Vector vector)
+        {
+            double sum = 0;
+            for (int i = 0; i < vector.length; i++)
+            {
+                sum += Math.Abs(vector[i]);
+            }
+            return sum;
+        }
     }
 }

@@ -14,18 +14,29 @@ namespace Diploma
         {
             Console.WriteLine("\t\t\tStart of application");
 
-            Quaternion Quat0 = new Quaternion(1.0, 0, 0, 0.0);
-            Quaternion QuatT = new Quaternion(2.0, 2.0, 2.0, 2.0);
-            Quaternion psiStart = new Quaternion(1.0, 1.0, 1.0, 1.0);
+            Quaternion LAMBDA_0 = new Quaternion(1, 0, 0, 0);
+            Quaternion LAMBDA_T = new Quaternion(2, 1, 1, 1);
 
-            double epsilon = 0.01;
-            int n = 100;
-            double T_start = 10;
-            IVector Omega = new Vector(new double[] {-1.0, 1.0});
-            
+            Quaternion PSI = new Quaternion(0, 0, 0, 0);
+            double T = 10;
 
-            MainProblem main = new MainProblem(Quat0, QuatT, epsilon, psiStart, T_start, n, Omega);
-            main.start();
+            int N = 100;
+            double eps = 0.001;
+
+
+            MainProblem main = new MainProblem(LAMBDA_0, LAMBDA_T, PSI, T, N, new Vector(new double[2] { -1, 1 }), eps);
+            main.printCurrentParameters();
+            NewtonMethod newton = new NewtonMethod(main, PSI, T);
+            newton.RunProcess();
+
+
+
+
+            Tuple<double, Quaternion> res = RungeKutta.Run(new PsiTime(PSI, T), main);
+            //PSI[3] = 0.06;
+            // T = 9;
+            // res = RungeKutta.Run(new PsiTime(PSI, T), main);*/
+
 
 
             Console.Write("\n\n\n\n\n\t\t\tEnter an key to exit... ");

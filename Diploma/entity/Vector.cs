@@ -29,6 +29,15 @@ namespace Diploma.entity
                 vect[i] = a[i];
             }
         }
+        public Vector(Vector a)
+        {
+            vect = new double[a.length];
+            for (int i = 0; i < a.length; i++)
+            {
+                vect[i] = a[i];
+            }
+        }
+
 
         void IVector.print()
         {
@@ -38,7 +47,7 @@ namespace Diploma.entity
                 {   
                     if(i == 0)
                     {
-                        System.Console.Write("Vector: [");
+                        System.Console.Write("[");
                     }
                     
                     if (i != vect.Length - 1)
@@ -96,7 +105,7 @@ namespace Diploma.entity
                 {
                     if (i == 0)
                     {
-                        System.Console.Write("Vector: [");
+                        System.Console.Write("[");
                     }
 
                     if (i != vect.Length - 1)
@@ -122,22 +131,19 @@ namespace Diploma.entity
         }
         public double norm()
         {
-            double res = 0;
+            double sum = 0;
             try
             {
                 for (int i = 0; i < vect.Length; i++)
                 {
-                    if (Math.Abs(vect[i]) > res)
-                    {
-                        res = Math.Abs(vect[i]);
-                    }
+                    sum += Math.Abs(vect[i]);
                 }
             }
             catch (NullReferenceException)
             {
                 Console.WriteLine("Empty Vect massive!");
             }
-            return res;
+            return sum;
         } 
         public static Vector operator +(Vector v1, Vector v2)
         {

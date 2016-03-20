@@ -12,7 +12,7 @@ namespace Diploma.entity
 
         public PsiTime(Quaternion psi, double time) 
         {
-            this.psi = psi;
+            this.psi = new Quaternion(psi);
             this.T = time;
         }    
     }

@@ -26,13 +26,13 @@ namespace Diploma.entity
         public Quaternion(double w, Vector3 v)
         {
             this.w = w;
-            this.v = v;
+            this.v = new Vector3(v);
 
         }
         public Quaternion(Quaternion q)
         {
             this.w = q.w;
-            this.v = q.v;
+            this.v = new Vector3(q.v);
         }
         public Quaternion(double angle, Vector3 v, bool withangle)
         {
@@ -170,7 +170,7 @@ namespace Diploma.entity
         // печать
         public void print()
         {
-            System.Console.WriteLine("Quaternion: [{0}, ({1}, {2}, {3})];", this.w, this.v.X, this.v.Y, this.v.Z);
+            System.Console.WriteLine("[{0}, ({1}, {2}, {3})];", this.w, this.v.X, this.v.Y, this.v.Z);
         }
         public void printInverse()
         {

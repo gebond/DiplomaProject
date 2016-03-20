@@ -41,25 +41,12 @@ namespace Diploma.methods
             get { return omega_min; }
         }
     
-
-
-        private Quaternion lambdaResult;
-        public Quaternion LambdaResult
-        {
-            set 
-            {
-                lambdaResult = value; 
-                Console.WriteLine("\n\t* MainProblem ->");
-                Console.WriteLine("\n\tCurrent Result:");
-                Console.Write("\t\t");
-                lambdaResult.print();
-            }
-        }
-
+        // САМОЕ ВАЖОЕ - ТЕКУЩИЙ ВЕКТОР PSITIME
+        private PsiTime psiTime;
 
         private NewtonMethod newtonMethod;
 
-        public MainProblem(Quaternion lam_0, Quaternion lam_t, double precision, Quaternion psi_start, double T_start, int n, IVector omega)
+        public MainProblem(Quaternion lam_0, Quaternion lam_t, Quaternion psi, double T, int n, IVector omega, double precision)
         {
             Console.WriteLine("\n\t* MainProblem created!");
             lambda0 = lam_0;
@@ -68,7 +55,7 @@ namespace Diploma.methods
             N = n;
             omega_min = omega[0];
             omega_max = omega[1];
-            newtonMethod = new NewtonMethod(this, psi_start, T_start);
+            psiTime = new PsiTime(psi, T);
         }
 
         public void start()
@@ -89,6 +76,7 @@ namespace Diploma.methods
             Console.Write("\t\t"); lambda0.printMagnitude();
             Console.WriteLine("\t\tt=T:");
             Console.Write("\t\t"); lambdaT.print();
+            Console.Write("\t\t T = {0}, PSI = ", psiTime.T); psiTime.psi.print();  
         }
 
 
