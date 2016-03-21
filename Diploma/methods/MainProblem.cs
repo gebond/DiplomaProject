@@ -10,9 +10,18 @@ namespace Diploma.methods
         private Vector3 omega0; //  кватернион при t=0
         public Vector3 Omega0
         {
-            get{return lambda0;}
+            get{return omega0;}
         }
-        
+        private Vector3 omegaT; //  кватернион при t=0
+        public Vector3 OmegaT
+        {
+            get { return omegaT; }
+        }
+        private double umax;
+        public double Umax
+        {
+            get{return umax;}
+        }
         private double eps; // epsilon - точность
         public double Epsilon
         {
@@ -24,33 +33,21 @@ namespace Diploma.methods
             get { return n; }
             set { n = value; }
         }
-
-        private double omega_max;
-        public double OmegaMax
-        {
-            get { return omega_max; }
-        }
-        private double omega_min;
-        public double OmegaMin
-        {
-            get { return omega_min; }
-        }
     
         // САМОЕ ВАЖОЕ - ТЕКУЩИЙ ВЕКТОР PSITIME
         private PsiTime psiTime;
 
         private NewtonMethod newtonMethod;
 
-        public MainProblem(Quaternion lam_0, Quaternion lam_t, Vector3 psi, double T, int n, IVector omega, double precision)
+        public MainProblem(Vector3 omega_0, Vector3 omega_t, Vector3 psi, double T, double U_max, int n, double precision)
         {
             Console.WriteLine("\n\t* MainProblem created!");
-            lambda0 = 
-            lambdaT = lam_t;
+            omega0 = new Vector3(omega_0);
+            omegaT = new Vector3(omega_t);
             eps = precision;
             N = n;
-            omega_min = omega[0];
-            omega_max = omega[1];
             psiTime = new PsiTime(psi, T);
+            umax = U_max;
         }
 
         public void start()
@@ -67,10 +64,10 @@ namespace Diploma.methods
             Console.WriteLine("\t\tepsilon = {0}", eps);
             Console.WriteLine("\t\tn = {0}", n);
             Console.WriteLine("\t\tt=0:");
-            Console.Write("\t\t"); lambda0.print();
-            Console.Write("\t\t"); lambda0.printMagnitude();
+            Console.Write("\t\t"); omega0.print();
+            Console.Write("\t\t"); omega0.norm();
             Console.WriteLine("\t\tt=T:");
-            Console.Write("\t\t"); lambdaT.print();
+            Console.Write("\t\t"); omegaT.print();
             Console.Write("\t\t T = {0}, PSI = ", psiTime.T); psiTime.psi.print();  
         }
 

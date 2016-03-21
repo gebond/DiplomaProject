@@ -16,6 +16,12 @@ namespace Diploma.entity
         {
             x = 0; y = 0; z = 0;
         }
+        public Vector3(Vector3 v)
+        {
+            this.x = v.x;
+            this.y = v.y;
+            this.z = v.z;
+        }
         public Vector3(double x, double y, double z)
         { 
             this.x = x; this.y = y; this.z = z; 
@@ -77,7 +83,29 @@ namespace Diploma.entity
         {
             return Math.Sqrt(x*x + y*y + z*z);
         }
-
+        public double this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case (0): return x;
+                    case (1): return y;
+                    case (2): return z;
+                    default: return 0;
+                }
+            }
+            set
+            {
+                switch (index)
+                {
+                    case (0): x = value; break;
+                    case (1): y = value; break;
+                    case (2): z = value; break;
+                    default: break;
+                }
+            }
+        }
         public double X{ 
             get
             {
@@ -114,7 +142,7 @@ namespace Diploma.entity
         {
             try
             {
-                System.Console.WriteLine("Vector3: [{0}, {1}, {2}]", x, y, z);
+                System.Console.WriteLine("[{0}, {1}, {2}]", x, y, z);
             }
             catch (NullReferenceException)
             {
@@ -125,7 +153,10 @@ namespace Diploma.entity
         {
             return Math.Sqrt(x * x + y * y + z * z);
         }
-
+        public Vector3 getNormalize()
+        {
+            return new Vector3(x/this.norm(), y/norm(), z/norm());
+        }
         public static Vector3 operator +(Vector3 v1, Vector3 v2)
         {
             return new Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
@@ -186,7 +217,7 @@ namespace Diploma.entity
         }
         public override string ToString()
         {
-            String result = String.Format("Vector3: [{0}, {1}, {2}]", x, y, z);
+            String result = String.Format("[{0}, {1}, {2}]", x, y, z);
             return result;
         }
     }

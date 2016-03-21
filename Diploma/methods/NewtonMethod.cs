@@ -8,10 +8,9 @@ namespace Diploma.methods
     {        
         
         private MainProblem callMain;
-        double delT = 1; // дельта для T
+        double delT = 0.01; // дельта для T
         double delPsi = 0.001;
         PsiTime currentPsiTime;// кватернион + время текущие ИСКОМОЕ ВРЕМЯ T
-
         List<double> xi = new List<double> {1.0}; // коэффициенты хи
 
 
@@ -21,8 +20,8 @@ namespace Diploma.methods
             callMain = CallFrom;
             /**
              * Vector vectPsiTime = [Quaternion Psi, Time]
-             * vect[0,1,2,3] = Psi[0,1,2,3]
-             * vect[4] == Time
+             * vect[0,1,2] = Psi[0,1,2]
+             * vect[3] == Time
              * */
             currentPsiTime = new PsiTime(psiStart, T_start);
         }
@@ -31,7 +30,9 @@ namespace Diploma.methods
         {
             Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% МЕТОД НЬЮТОНА %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
             var k = 1;
-            while (k<3)
+            Vector N0 = null;
+            Vector Nnext = null;
+            do
             {
                 Console.WriteLine("\n\t\tМЕТОДА НЬЮТОНА {0} ИТЕРАЦИЯ:", k);
                 while ((double) currentPsiTime.T / callMain.N >= 0.01) // проверяем будет ли ШАГ <= 0.01
@@ -41,7 +42,7 @@ namespace Diploma.methods
 
                 //Console.WriteLine("\n\t\tНАЧАЛЬНАЯ НЕВЯЗКА N0:");
                 // cоставляем первую невязку
-                Vector N0 = countN(currentPsiTime);
+                N0 = countN(currentPsiTime);
 
                 // составляем СЛАУ по невязкам и решаем поправки
                 SLAU slau = createSLAU(N0, callMain.Epsilon);
@@ -49,11 +50,11 @@ namespace Diploma.methods
                 Console.WriteLine("\t\tПОЛУЧЕННЫЕ ПОПРАВКИ: " + corrects.ToString());
 
                 // получаем следуюущую невязку и в случае успеха меняем текущие psiTime
-                getNextAndChangePsiT(corrects, N0);
+                Nnext = getNextAndChangePsiT(corrects, N0);
 
                 // если Nnext было найдено - значит можно переходить к следующей итерации метода Ньютона
                 k++;
-            }
+            } while(N0.norm() - Nnext.norm() > callMain.Epsilon);
             Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         }
 
@@ -64,7 +65,7 @@ namespace Diploma.methods
             Console.WriteLine("\t\t ТЕПЕРЬ:" + Nnext.norm() + "  БЫЛО:" + N0.norm());
             Console.WriteLine("\n\t%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         }
-        private void getNextAndChangePsiT(Vector corrects, Vector N0)
+        private Vector getNextAndChangePsiT(Vector corrects, Vector N0)
         {
             Vector Nnext = null;
             PsiTime tryPsiTime = new PsiTime(null);
@@ -72,34 +73,37 @@ namespace Diploma.methods
             var countxi = 0;
             do
             {
-                try
+                var xi = getXi(countxi);
+                do
                 {
-                    Console.Write("\t\t -> XI={0} ", xi[countxi]);
-                }
-                catch (Exception ex)
-                {
-                    xi.Add(xi[countxi - 1] / 2);
-                    if (countxi > 15) // сколько раз разрешается уменьшить ХИ
+                    tryPsiTime = upgradePsiTime(corrects, xi);
+                    countxi++;
+                    if (countxi > 30) // сколько раз разрешается уменьшить ХИ
                     {
-                        Console.WriteLine("\t\tНЕЛЬЗЯ УМЕНЬШИТЬ НОРМУ НЕВЯЗКИ!");
+                        Console.WriteLine("\t\tВРЕМЯ T < 0 ДЛЯ Xi!");
                         Console.ReadKey();
                     }
-                    Console.Write("\t\t -> XI={0} ", xi[countxi]);
-                }
-                tryPsiTime = upgradePsiTime(corrects, xi[countxi]);
+                } while(tryPsiTime.T <= 0);
+                Console.Write("\t\t -> XI={0} ", xi);
                 Nnext = countN(tryPsiTime);
                 countxi++;
+                if (countxi > 30) // сколько раз разрешается уменьшить ХИ
+                {
+                    Console.WriteLine("\t\tНЕЛЬЗЯ УМЕНЬШИТЬ НОРМУ НЕВЯЗКИ!");
+                    Console.ReadKey();
+                }
 
             } while (Nnext.norm() > N0.norm());
             currentPsiTime = new PsiTime(tryPsiTime);
             Console.WriteLine("\t\tOK! ТЕПЕРЬ: " + currentPsiTime.ToString() + "\n\t\tНОРМА НЕВЯЗКИ ПОСЛЕ ИТЕРАЦИИ: " + Nnext.norm());
             Console.WriteLine("\t\tНОРМА УМЕНЬШИЛАСЬ НА " + (N0.norm() - Nnext.norm()));
+            return Nnext;
             //showResults(Nnext, N0);
         }
         private PsiTime upgradePsiTime(Vector corrects, double xi)
         {
             PsiTime res = new PsiTime(currentPsiTime);
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 4; i++)
             {
                 if (i == 0)
                 {
@@ -115,8 +119,8 @@ namespace Diploma.methods
         }
         private Matrix createNMatrix()
         {
-            Vector[] Nmass = new Vector[5];
-            for (int i = 0; i < 5; i++)
+            Vector[] Nmass = new Vector[4];
+            for (int i = 0; i < 4; i++)
             {
                 if (i == 0)
                 {
@@ -138,18 +142,18 @@ namespace Diploma.methods
         }
         private Matrix createNmatrixForSLau(Matrix N, Vector N0)
         {
-            Matrix res = new Matrix((short)N0.length);
+            Matrix res = new Matrix((short) N0.length);
             for (int i = 0; i < res.length; i++)
             {
                 for (int j = 0; j < res.length; j++)
                 {
-                    if (i == 0)
+                    if (j == 0)
                     {
-                        res[i, j] = (N[i, j] - N0[i]) / delT;
+                        res[i, j] = (N[j, i] - N0[i]) / delT;
                     }
                     else
                     {
-                        res[i, j] = (N[i, j] - N0[i]) / delPsi;
+                        res[i, j] = (N[j, i] - N0[i]) / delPsi;
                     }
                 }
             }
@@ -166,15 +170,15 @@ namespace Diploma.methods
         }
         private Vector countN(PsiTime psiTimeRequest)
         {
-            Vector Nres = new Vector(5);
+            Vector Nres = new Vector(4);
             // обращение к РК для получения кватерниона на конце
             // results = <hamilton, lambda>
-            Tuple<double, Quaternion> results = RungeKutta.Run(psiTimeRequest, callMain);
+            Tuple<double, Vector3> results = RungeKutta.Run(psiTimeRequest, callMain);
 
             Nres[0] = results.Item1; //  это значение функции гамильтона в полученной системе РК
-            Quaternion diff = results.Item2 - callMain.LambdaT;
+            Vector3 diff = results.Item2 - callMain.OmegaT;
             
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 3; i++)
             {
                 Nres[i+1] = diff[i]; // копируем весь кватернион разницы
             }
@@ -189,6 +193,21 @@ namespace Diploma.methods
                 sum += Math.Abs(vector[i]);
             }
             return sum;
+        }
+        private double getXi(int countXi)
+        {
+            double res;
+            try
+            {
+                res = xi[countXi];
+            }
+            catch (Exception)
+            {
+                xi.Add(xi[countXi - 1] / 2);
+                res = xi[countXi];
+            }
+            Console.WriteLine("return xi" +  res);
+            return res;
         }
     }
 }
