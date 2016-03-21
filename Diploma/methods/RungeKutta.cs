@@ -23,8 +23,9 @@ namespace Diploma.methods
             Console.Write("\t\t\t  ~~~ n={0} h={1} ", callMain.N, h);
 
             Quaternion lam_k = callMain.Lambda0; // получено начальное lam0
-            Quaternion psi_k = new Quaternion(psitime.psi); // получен psi0
-            Quaternion omega_k = new Quaternion();
+            var psi_k = new Vector3(psitime.psi); // получен psi0
+
+            /*Quaternion omega_k = new Quaternion();
 
             for (int k = 0; k < callMain.N; k++)
             {
@@ -53,11 +54,11 @@ namespace Diploma.methods
                  * 
                  * теперь необходимо посчитать коэффициенты к1...к4 для Р-К и получть следующее приближение
                  * c помощью метода calcNext
-                 * */
+                 * 
 
 
                 Quaternion psi_k_next = RungeKutta.сalcNext(psi_k, omega_k, k);
-                Quaternion lam_k_next = RungeKutta.сalcNext(lam_k, omega_k, k);
+                Quaternion lam_k_next = RungeKutta.сalcNext(lam_k, omega_k, k);*/
 
                 psi_k = psi_k_next;
                 lam_k = lam_k_next;
@@ -78,9 +79,9 @@ namespace Diploma.methods
          * функция зависимости PSI(t), Lambda(t)
          * 
          * */
-        private static Quaternion func(Quaternion x, Quaternion omeg)
+        private static Vector3 func(Vector3 x, Vector3 omeg)
         {
-            Quaternion res = (1.0 / 2.0) * (x % omeg);
+            var res = (1.0 / 2.0) * (x % omeg);
             return res;
         }
         private static double Hamiltonian(Quaternion psi, Quaternion omegaopt, Quaternion lambda)

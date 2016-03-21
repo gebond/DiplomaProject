@@ -15,9 +15,9 @@ namespace Diploma
             Console.WriteLine("\t\t\tStart of application");
 
             Quaternion LAMBDA_0 = new Quaternion(1, 0, 0, 0);
-            Quaternion LAMBDA_T = new Quaternion(2, 1, 1, 1);
+            Quaternion LAMBDA_T = new Quaternion(1, 0.5, 0, 1);
 
-            Quaternion PSI = new Quaternion(0, 0, 0, 0);
+            var PSI = new Vector3(0, 0, 0);
             double T = 10;
 
             int N = 100;

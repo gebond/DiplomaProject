@@ -15,7 +15,7 @@ namespace Diploma.methods
         List<double> xi = new List<double> {1.0}; // коэффициенты хи
 
 
-        public NewtonMethod(MainProblem CallFrom, Quaternion psiStart, double T_start)
+        public NewtonMethod(MainProblem CallFrom, Vector3 psiStart, double T_start)
         {
             Console.WriteLine("\n\t* NewtonMethod created!");
             callMain = CallFrom;
@@ -31,7 +31,7 @@ namespace Diploma.methods
         {
             Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% МЕТОД НЬЮТОНА %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
             var k = 1;
-            while (true)
+            while (k<3)
             {
                 Console.WriteLine("\n\t\tМЕТОДА НЬЮТОНА {0} ИТЕРАЦИЯ:", k);
                 while ((double) currentPsiTime.T / callMain.N >= 0.01) // проверяем будет ли ШАГ <= 0.01

@@ -110,7 +110,17 @@ namespace Diploma.entity
                 z = value;
             }
         }
-
+        public void print()
+        {
+            try
+            {
+                System.Console.WriteLine("Vector3: [{0}, {1}, {2}]", x, y, z);
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("Empty Vector3!");
+            }
+        }
         public double norm()
         {
             return Math.Sqrt(x * x + y * y + z * z);
@@ -173,6 +183,11 @@ namespace Diploma.entity
             hashcode = 31 * hashcode + (int)y.GetHashCode();
             hashcode = 31 * hashcode + (int)z.GetHashCode();
             return hashcode;
+        }
+        public override string ToString()
+        {
+            String result = String.Format("Vector3: [{0}, {1}, {2}]", x, y, z);
+            return result;
         }
     }
 }
