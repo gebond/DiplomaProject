@@ -54,8 +54,8 @@ namespace Diploma.methods
 
                 // если Nnext было найдено - значит можно переходить к следующей итерации метода Ньютона
                 k++;
-            } while (k < 2);
-            //} while(N0.norm() - Nnext.norm() > callMain.Epsilon);
+            //} while (k < 2);
+            } while(N0.norm() - Nnext.norm() > callMain.Epsilon);
             Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         }
 

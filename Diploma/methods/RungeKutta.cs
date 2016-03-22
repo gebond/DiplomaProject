@@ -24,8 +24,8 @@ namespace Diploma.methods
             Console.WriteLine("" + psitime.ToString());
             Console.Write("\t\t\t  ~~~ n={0} h={1} ", callMain.N, h);
 
-            var omega_k = callMain.Omega0; // получено начальное omega0
-            var psi_0 = new Vector3(psitime.psi); // получен psi0
+            Vector3 omega_k = callMain.Omega0; // получено начальное omega0
+            Vector3 psi_0 = new Vector3(psitime.psi); // получен psi0
 
 
             for (int k = 0; k < callMain.N; k++)
@@ -42,8 +42,8 @@ namespace Diploma.methods
                  * */
 
 
-                var omega_k_next = RungeKutta.сalcNext(psi_0, omega_k, k);
-                omega_k = omega_k_next;
+                Vector3 omega_k_next = RungeKutta.сalcNext(psi_0, omega_k, k);
+                omega_k = new Vector3(omega_k_next);
 
 
                 //Console.Write("lamd_next = "); lam_k.print();
@@ -53,7 +53,7 @@ namespace Diploma.methods
             Console.WriteLine("\n\t\t\t  ~~~ РЕЗУЛЬТАТЫ:");
             Console.WriteLine("\t\t\t  ~~~ ПОЛУЧЕНО Omega(T) = {0}\n\t\t\t  ~~~ ЗАДАЧА Omega(T) = {1}", omega_k.ToString(),  callMain.OmegaT.ToString());
 
-            double resHamilton = Hamiltonian(psi_0, omega_k);
+            double resHamilton = Hamiltonian(psi_0, func(psi_0));
             return new Tuple<double, Vector3>(resHamilton, omega_k);
         }
 
