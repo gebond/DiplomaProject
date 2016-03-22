@@ -151,14 +151,14 @@ namespace Diploma.entity
             {
                 for (int i = 0; i < vect.Length; i++)
                 {
-                    sum += Math.Abs(vect[i]);
+                    sum += Math.Abs(vect[i]) * Math.Abs(vect[i]);
                 }
             }
             catch (NullReferenceException)
             {
                 Console.WriteLine("Empty Vect massive!");
             }
-            return sum;
+            return Math.Sqrt(sum);
         } 
         public static Vector operator +(Vector v1, Vector v2)
         {

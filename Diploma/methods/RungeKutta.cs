@@ -50,7 +50,7 @@ namespace Diploma.methods
                 //Console.Write("psi_next= "); psi_k.print();
                 //Console.Write("omega_next = "); omega_k.print();
             }
-            Console.WriteLine("\n\t\t\t  ~~~ РЕЗУЛЬТАТЫ:\n\t\t\t  ~~~ ");
+            Console.WriteLine("\n\t\t\t  ~~~ РЕЗУЛЬТАТЫ:");
             Console.WriteLine("\t\t\t  ~~~ ПОЛУЧЕНО Omega(T) = {0}\n\t\t\t  ~~~ ЗАДАЧА Omega(T) = {1}", omega_k.ToString(),  callMain.OmegaT.ToString());
 
             double resHamilton = Hamiltonian(psi_0, omega_k);

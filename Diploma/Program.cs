@@ -14,21 +14,22 @@ namespace Diploma
         {
             Console.WriteLine("\t\t\tStart of application");
 
-            Vector3 OMEGA_0 = new Vector3(0.01, 0.01, 0.03);
+            Vector3 OMEGA_0 = new Vector3(0.2, 0.3, -0.4);
             Vector3 OMEGA_T = new Vector3(0, 0, 0);
-            double Umax = 0.01;
+            double Umax = 0.001;
 
-            var PSI = new Vector3(0.5, 0.5, 0.5);
-            double T = 60;
+            var PSI = new Vector3(-0.2, 0.2, -0.2);
+            double T = 10;
 
             int N = 100;
-            double eps = 0.00000001;
+            double eps = 0.000000001;
 
             MainProblem main = new MainProblem(OMEGA_0, OMEGA_T, PSI, T, Umax, N, eps);
 
             NewtonMethod newton = new NewtonMethod(main, PSI, T);
             newton.RunProcess();
 
+            //Console.WriteLine("res " + Math.Pow(2,0));
 
             //Tuple<double, Vector3> res = RungeKutta.Run(new PsiTime(PSI, T), main);
             //PSI[3] = 0.06;
