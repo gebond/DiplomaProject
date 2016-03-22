@@ -53,12 +53,19 @@
     <Compile Include="entity\Vector3.cs" />
     <Compile Include="methods\MainProblem.cs" />
     <Compile Include="methods\NewtonMethod.cs" />
+    <Compile Include="output\RungeKuttaLambda.cs" />
     <Compile Include="methods\RungeKutta.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="output\out.txt" />
+    <Content Include="output\omega\omega3.txt" />
+    <Content Include="output\omega\omega2.txt" />
+    <Content Include="output\omega\omega1.txt" />
+    <Content Include="output\time.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="output\script.m" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

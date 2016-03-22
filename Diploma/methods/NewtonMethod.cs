@@ -11,8 +11,8 @@ namespace Diploma.methods
         double delT = 0.001; // дельта для T
         double delPsi = 0.001;
         PsiTime currentPsiTime;// кватернион + время текущие ИСКОМОЕ ВРЕМЯ T
-         
 
+        Quaternion resultLambda;
 
         public NewtonMethod(MainProblem CallFrom, Vector3 psiStart, double T_start)
         {
@@ -57,6 +57,9 @@ namespace Diploma.methods
             //} while (k < 2);
             } while(N0.norm() - Nnext.norm() > callMain.Epsilon);
             Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+
+            resultLambda = RungeKuttaLambda.Run(currentPsiTime, callMain);
+
         }
 
         private void showResults(Vector Nnext, Vector N0)

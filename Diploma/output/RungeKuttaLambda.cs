@@ -4,12 +4,12 @@ using Diploma.entity;
 
 namespace Diploma.methods
 {
-    class RungeKutta
+    class RungeKuttaLambda
     {
         private static double h;
         private static double Umax;
- 
-        public static Tuple<double, Vector3> Run(PsiTime psitime, MainProblem callMain)
+
+        public static Quaternion Run(PsiTime psitime, MainProblem callMain)
         {
             /**
              * Vector vectPsiTime = [Quaternion Psi, Time]
@@ -24,7 +24,7 @@ namespace Diploma.methods
             Console.WriteLine("" + psitime.ToString());
             Console.Write("\t\t\t  ~~~ n={0} h={1} ", callMain.N, h);
 
-            Vector3 omega_k = callMain.Omega0; // получено начальное omega0
+            Quaternion lam_k = callMain.Lambda0; // получено начальное lambda0
             Vector3 psi_0 = new Vector3(psitime.psi); // получен psi0
 
 
@@ -33,7 +33,7 @@ namespace Diploma.methods
                 // необходимо посчитать вектор3 omega
                 // расчитываем все частные производные ф-ии H
                 //Console.WriteLine("k={0}", k);
-                
+
                 /*
                  * составлен кватернион omega(opt) для текущего шага k
                  * 
@@ -42,8 +42,8 @@ namespace Diploma.methods
                  * */
 
 
-                Vector3 omega_k_next = сalcNext(psi_0, omega_k, k);
-                omega_k = new Vector3(omega_k_next);
+                Quaternion lam_k_next = сalcNext(lam_k, psi_0, k);
+                lam_k = new Quaternion(lam_k_next);
 
 
                 //Console.Write("lamd_next = "); lam_k.print();
@@ -51,32 +51,28 @@ namespace Diploma.methods
                 //Console.Write("omega_next = "); omega_k.print();
             }
             Console.WriteLine("\n\t\t\t  ~~~ РЕЗУЛЬТАТЫ:");
-            Console.WriteLine("\t\t\t  ~~~ ПОЛУЧЕНО Omega(T) = {0}\n\t\t\t  ~~~ ЗАДАЧА Omega(T) = {1}", omega_k.ToString(),  callMain.OmegaT.ToString());
+            Console.WriteLine("\t\t\t  ~~~ ПОЛУЧЕНО Lambda(T) = {0}\n\t\t\t  ~~~ БЫЛО Lambda(0) = {1}", lam_k.ToString(), callMain.Lambda0.ToString());
 
-            double resHamilton = Hamiltonian(psi_0, func(psi_0));
-            return new Tuple<double, Vector3>(resHamilton, omega_k);
+            return new Quaternion(lam_k);
         }
 
         /**
          * функция зависимости PSI(t), Lambda(t)
          * 
          * */
-        private static Vector3 func(Vector3 psi)
+        private static Quaternion func(Quaternion lambda, Vector3 psi)
         {
-            var res = Umax * psi.getNormalize();
+            var omegOpt = new Quaternion(0, Umax * psi.getNormalize());
+            Quaternion res = (1.0 / 2.0) * (lambda % omegOpt);
             return res;
         }
-        private static double Hamiltonian(Vector3 psi, Vector3 omegaopt)
+        private static Quaternion сalcNext(Quaternion x, Vector3 psi, int k)
         {
-            return - 1.0 + psi * omegaopt;
-        }
-        private static Vector3 сalcNext(Vector3 psi, Vector3 omeg, int k)
-        {
-            var k1 = h * func(psi);
-            var k2 = h * func(psi + (1.0 / 2.0) * k1);
-            var k3 = h * func(psi + (1.0 / 2.0) * k2);
-            var k4 = h * func(psi + k3);
-            return omeg + (1.0 / 6.0) * (k1 + 2.0 * k2 + 2.0 * k3 + k4);
+            Quaternion k1 = h * func(x, psi);
+            Quaternion k2 = h * func(x + (1.0 / 2.0) * k1, psi);
+            Quaternion k3 = h * func(x + (1.0 / 2.0) * k2, psi);
+            Quaternion k4 = h * func(x + k3, psi);
+            return x + (1.0 / 6.0) * (k1 + 2.0 * k2 + 2.0 * k3 + k4);
         }
     }
 }

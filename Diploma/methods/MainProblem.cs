@@ -7,12 +7,18 @@ namespace Diploma.methods
 {
     class MainProblem
     {
-        private Vector3 omega0; //  кватернион при t=0
+
+        private Quaternion lambda0;
+        public Quaternion Lambda0
+        {
+            get { return lambda0; }
+        }
+        private Vector3 omega0; //  вектор3 при t=0
         public Vector3 Omega0
         {
             get{return omega0;}
         }
-        private Vector3 omegaT; //  кватернион при t=0
+        private Vector3 omegaT; //  вектор3 конечный
         public Vector3 OmegaT
         {
             get { return omegaT; }
@@ -39,11 +45,12 @@ namespace Diploma.methods
 
         private NewtonMethod newtonMethod;
 
-        public MainProblem(Vector3 omega_0, Vector3 omega_t, Vector3 psi, double T, double U_max, int n, double precision)
+        public MainProblem(Vector3 omega_0, Vector3 omega_t, Vector3 psi, Quaternion lam_0,  double T, double U_max, int n, double precision)
         {
             Console.WriteLine("\n\t* MainProblem created!");
             omega0 = new Vector3(omega_0);
             omegaT = new Vector3(omega_t);
+            lambda0 = new Quaternion(lam_0);
             eps = precision;
             N = n;
             psiTime = new PsiTime(psi, T);
