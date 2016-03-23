@@ -58,7 +58,9 @@ namespace Diploma.methods
             } while(N0.norm() - Nnext.norm() > callMain.Epsilon);
             Console.WriteLine("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             resultLambda = RungeKuttaLambda.Run(currentPsiTime, callMain);
+            RungeKuttaOmegaFile.Run(currentPsiTime, callMain);
 
         }
 

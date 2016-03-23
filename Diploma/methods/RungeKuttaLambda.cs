@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Diploma.entity;
+using System.IO;
 
 namespace Diploma.methods
 {
     class RungeKuttaLambda
     {
-        private static double h;
+        private static double h; 
+        private static double htime;
         private static double Umax;
 
         public static Quaternion Run(PsiTime psitime, MainProblem callMain)
@@ -20,6 +22,7 @@ namespace Diploma.methods
             Console.Write("\n\t\t\t  ~~~ МЕТОД РУНГЕ КУТТЫ ПРИ ");
             double Time = psitime.T; // взято время Т
             h = Time / callMain.N; // посчитан шаг
+            htime = Time / 100;
             Umax = callMain.Umax;
             Console.WriteLine("" + psitime.ToString());
             Console.Write("\t\t\t  ~~~ n={0} h={1} ", callMain.N, h);
@@ -27,7 +30,7 @@ namespace Diploma.methods
             Quaternion lam_k = callMain.Lambda0; // получено начальное lambda0
             Vector3 psi_0 = new Vector3(psitime.psi); // получен psi0
 
-
+            var ktime = 0;
             for (int k = 0; k < callMain.N; k++)
             {
                 // необходимо посчитать вектор3 omega
@@ -43,6 +46,13 @@ namespace Diploma.methods
 
 
                 Quaternion lam_k_next = сalcNext(lam_k, psi_0, k);
+                if (ktime * htime == k * h) // когда совпал шаг по 
+                {
+                    Console.Write("\nK={0} ktime={1} lam={2}", k, ktime, lam_k.ToString());
+                    var clear = (ktime == 0) ? true : false;
+                    printOutput(lam_k, clear);
+                    ktime++;
+                }
                 lam_k = new Quaternion(lam_k_next);
 
 
@@ -60,6 +70,30 @@ namespace Diploma.methods
          * функция зависимости PSI(t), Lambda(t)
          * 
          * */
+        private static void printOutput(Quaternion lambdaToPrint, bool clear)
+        {
+            var dirPath0 = @"D:\Develop\Diploma\Diploma\output\lambda\lambda0.txt";
+            using (StreamWriter sw = new StreamWriter(dirPath0, !clear, System.Text.Encoding.Default))
+            {
+                sw.Write(lambdaToPrint[0] + "; ");
+            } 
+            var dirPath1 = @"D:\Develop\Diploma\Diploma\output\lambda\lambda1.txt";
+            using (StreamWriter sw = new StreamWriter(dirPath1, !clear, System.Text.Encoding.Default))
+            {
+                sw.Write(lambdaToPrint[1] + "; ");
+            } 
+            var dirPath2 = @"D:\Develop\Diploma\Diploma\output\lambda\lambda2.txt";
+            using (StreamWriter sw = new StreamWriter(dirPath2, !clear, System.Text.Encoding.Default))
+            {
+                sw.Write(lambdaToPrint[2] + "; ");
+            } 
+            var dirPath3 = @"D:\Develop\Diploma\Diploma\output\lambda\lambda3.txt";
+            using (StreamWriter sw = new StreamWriter(dirPath3, !clear, System.Text.Encoding.Default))
+            {
+                sw.Write(lambdaToPrint[3] + "; ");
+            }
+        }
+
         private static Quaternion func(Quaternion lambda, Vector3 psi)
         {
             var omegOpt = new Quaternion(0, Umax * psi.getNormalize());

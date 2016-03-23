@@ -53,12 +53,17 @@
     <Compile Include="entity\Vector3.cs" />
     <Compile Include="methods\MainProblem.cs" />
     <Compile Include="methods\NewtonMethod.cs" />
-    <Compile Include="output\RungeKuttaLambda.cs" />
+    <Compile Include="methods\RungeKuttaOmegaFile.cs" />
+    <Compile Include="methods\RungeKuttaLambda.cs" />
     <Compile Include="methods\RungeKutta.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="output\lambda\lambda0.txt" />
+    <Content Include="output\lambda\lambda2.txt" />
+    <Content Include="output\lambda\lambda3.txt" />
+    <Content Include="output\lambda\lambda1.txt" />
     <Content Include="output\omega\omega3.txt" />
     <Content Include="output\omega\omega2.txt" />
     <Content Include="output\omega\omega1.txt" />
